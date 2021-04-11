@@ -17,12 +17,24 @@ organic look is the "randomness" associated with each parameter. In
 essence, creating a particle system means setting base physics
 parameters and then adding randomness to them.
 
-Particles2D
-~~~~~~~~~~~
+Particle nodes
+~~~~~~~~~~~~~~
 
-Particle systems are added to the scene via the
-:ref:`Particles2D <class_Particles2D>`
-node. However, after creating that node you will notice that only a white dot was created,
+Godot provides two different nodes for 2D particles, :ref:`class_Particles2D` and
+:ref:`class_CPUParticles2D`.
+Particles2D is more advanced and uses the GPU to process particle effects, but that limits
+it to higher end graphics API, and in our case to the GLES3 renderer. For projects using
+the GLES2 backend, CPUParticles2D is a CPU-driven option with near feature parity with
+Particles2D, but lesser performance. While Particles2D is configured via a
+:ref:`class_ParticlesMaterial` (and optionally with a custom shader), the matching options
+are provided via node properties in CPUParticles2D (with the exception of the trail settings).
+You can convert a Particles2D node into a CPUParticles2D node by clicking on the node in the
+inspector, and selecting "Convert to CPUParticles2D" in the "Particles" menu of the toolbar.
+
+.. image:: img/particles_convert.png
+
+The rest of this tutorial is going to use the Particles2D node. First, add a Particles2D
+node to your scene. After creating that node you will notice that only a white dot was created,
 and that there is a warning icon next to your Particles2D node in the inspector. This
 is because the node needs a ParticlesMaterial to function.
 
@@ -166,32 +178,35 @@ means particles are drawn according to their emission order (default).
 ParticlesMaterial settings
 --------------------------
 
-Particles2D > Process Material > Material > drop-down menu > Edit:
+Direction
+~~~~~~~~~
 
-.. Commented out as not implemented in 3.x for now.
-..
-   Direction
-   ~~~~~~~~~
-..
-   This is the base angle at which particles emit. Default is ``0`` (down):
-..
-   .. image:: img/paranim1.gif
-..
-   Changing it will change the emissor direction, but gravity will still affect them:
-..
-   .. image:: img/paranim2.gif
-..
-   This parameter is useful because, by rotating the node, gravity will
-   also be rotated. Changing direction allows them to be separated.
+This is the base direction at which particles emit. The default is
+``Vector3(1, 0, 0)`` which makes particles emit to the right. However,
+with the default gravity settings, particles will go straight down.
+
+.. image:: img/direction1.png
+
+For this property to be noticeable, you need an *initial velocity* greater
+than 0. Here, we set the initial velocity to 40. You'll notice that
+particles emit toward the right, then go down because of gravity.
+
+.. image:: img/direction2.png
 
 Spread
 ~~~~~~
 
 This parameter is the angle in degrees which will be randomly added in
 either direction to the base ``Direction``. A spread of ``180`` will emit
-in all directions (+/- 180).
+in all directions (+/- 180). For spread to do anything the "Initial Velocity"
+parameter must be greater than 0.
 
 .. image:: img/paranim3.gif
+
+Flatness
+~~~~~~~~
+
+This property is only useful for 3D particles.
 
 Gravity
 ~~~~~~~
@@ -203,7 +218,7 @@ The gravity applied to every particle.
 Initial Velocity
 ~~~~~~~~~~~~~~~~
 
-Linear velocity is the speed at which particles will be emitted (in
+Initial velocity is the speed at which particles will be emitted (in
 pixels/sec). Speed might later be modified by gravity or other
 accelerations (as described further below).
 
@@ -262,7 +277,7 @@ high linear velocity and then stop as they fade.
 Angle
 ~~~~~
 
-Determines the initial angle of the particle (in degress). This parameter
+Determines the initial angle of the particle (in degrees). This parameter
 is mostly useful randomized.
 
 .. image:: img/paranim11.gif
@@ -285,3 +300,61 @@ Hue variation
 The ``Variation`` value sets the initial hue variation applied to each
 particle. The ``Variation Random`` value controls the hue variation
 randomness ratio.
+
+Emission Shapes
+---------------
+
+ParticlesMaterials allow you to set an Emission Mask, which dictates
+the area and direction in which particles are emitted.
+These can be generated from textures in your project.
+
+Ensure that a ParticlesMaterial is set, and the Particles2D node is selected.
+A "Particles" menu should appear in the Toolbar:
+
+.. image:: img/emission_shapes1.png
+
+Open it and select "Load Emission Mask":
+
+.. image:: img/emission_shapes2.png
+
+Then select which texture you want to use as your mask:
+
+.. image:: img/emission_shapes3.png
+
+A dialog box with several settings will appear.
+
+Emission Mask
+~~~~~~~~~~~~~
+
+Three types of emission masks can be generated from a texture:
+
+-  Solid Pixels: Particles will spawn from any area of the texture,
+   excluding transparent areas.
+
+.. image:: img/emission_mask_solid.gif
+
+-  Border Pixels: Particles will spawn from the outer edges of the texture.
+
+.. image:: img/emission_mask_border.gif
+
+-  Directed Border Pixels: Similar to Border Pixels, but adds extra
+   information to the mask to give particles the ability to emit away
+   from the borders. Note that an ``Initial Velocity`` will need to
+   be set in order to utilize this.
+
+.. image:: img/emission_mask_directed_border.gif
+
+Emission Colors
+~~~~~~~~~~~~~~~
+
+``Capture from Pixel`` will cause the particles to inherit the color of the mask at their spawn points.
+
+Once you click "OK", the mask will be generated and set to the ParticlesMaterial, under the ``Emission Shape`` section:
+
+.. image:: img/emission_shapes4.png
+
+All of the values within this section have been automatically generated by the
+"Load Emission Mask" menu, so they should generally be left alone.
+
+.. note:: An image should not be added to ``Point Texture`` or ``Color Texture`` directly.
+          The "Load Emission Mask" menu should always be used instead.

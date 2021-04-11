@@ -77,7 +77,7 @@ Blend2 / Blend3
 
 These nodes will blend between two or three inputs by a user-specified blend value:
 
-.. image:: img/animtree5.png
+.. image:: img/animtree5.gif
 
 For more complex blending, it is advised to use blend spaces instead.
 
@@ -111,7 +111,7 @@ Very simple state machine (when you don't want to cope with a ``StateMachine`` n
 BlendSpace2D
 ^^^^^^^^^^^^
 
-``BlendSpace2D`` is a node to do advanced blending in two dimensions. Points are added to a two dimensional space and then a position
+``BlendSpace2D`` is a node to do advanced blending in two dimensions. Points are added to a two-dimensional space and then a position
 can be controlled to determine blending:
 
 .. image:: img/animtree7.gif
@@ -149,7 +149,7 @@ There are many types of transitions:
 
 .. image:: img/animtree12.png
 
-* *Immeditate*: Will switch to the next state immediately. The current state will end and blend into the beginning of the new one.
+* *Immediate*: Will switch to the next state immediately. The current state will end and blend into the beginning of the new one.
 * *Sync*: Will switch to the next state immediately, but will seek the new state to the playback position of the old state.
 * *At End*: Will wait for the current state playback to end, then switch to the beginning of the next state animation.
 
@@ -201,7 +201,7 @@ Controlling from code
 
 After building the tree and previewing it, the only question remaining is "How is all this controlled from code?".
 
-Keep in mind that the animaton nodes are just resources and, as such, they are shared between all the instances.
+Keep in mind that the animation nodes are just resources and, as such, they are shared between all the instances.
 Setting values in the nodes directly will affect all instances of the scene that uses this ``AnimationTree``.
 This has some cool use cases, though, e.g. you can copy and paste parts of your animation tree, or reuse nodes with a complex layout
 (such as a state machine or blend space) in different animation trees.
@@ -212,7 +212,7 @@ Check the "Parameters" section of the ``AnimationTree`` node to see all the para
 .. image:: img/animtree16.png
 
 This is handy because it makes it possible to animate them from an ``AnimationPlayer``, or even the ``AnimationTree`` itself,
-allowing the realisation of very complex animation logic.
+allowing the realization of very complex animation logic.
 
 To modify these values from code, the property path must be obtained. This is done easily by hovering the mouse over any of the parameters:
 
@@ -245,11 +245,11 @@ object from the ``AnimationTree`` node (it is exported as a property).
 .. tabs::
  .. code-tab:: gdscript GDScript
 
-    var state_machine = anim_tree["parameters/StateMachine/playback"]
+    var state_machine = anim_tree["parameters/playback"]
 
  .. code-tab:: csharp
 
-    AnimationNodeStateMachinePlayback stateMachine = (AnimationNodeStateMachinePlayback)animTree.Get("parameters/StateMachine/playback");
+    AnimationNodeStateMachinePlayback stateMachine = (AnimationNodeStateMachinePlayback)animTree.Get("parameters/playback");
 
 Once retrieved, it can be used by calling one of the many functions it offers:
 
@@ -261,3 +261,7 @@ Once retrieved, it can be used by calling one of the many functions it offers:
  .. code-tab:: csharp
 
     stateMachine.Travel("SomeState")
+
+The state machine must be running before you can travel. Make sure to either call ``start()`` or choose a node to **Autoplay on Load**.
+
+.. image:: img/animtree18.png

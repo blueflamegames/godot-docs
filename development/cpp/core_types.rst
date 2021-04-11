@@ -12,7 +12,7 @@ understanding.
 Definitions
 -----------
 
-Godot uses the standard C98 datatypes, such as ``uint8_t``,
+Godot uses the standard C99 datatypes, such as ``uint8_t``,
 ``uint32_t``, ``int64_t``, etc. which are nowadays supported by every
 compiler. Reinventing the wheel for those is not fun, as it makes code
 more difficult to read.
@@ -79,7 +79,7 @@ should not be used. Instead, a few other ones are provided.
 
 For C-style allocation, Godot provides a few macros:
 
-.. code:: cpp
+.. code-block:: none
 
     memalloc()
     memrealloc()
@@ -90,7 +90,7 @@ library.
 
 For C++-style allocation, special macros are provided:
 
-.. code:: cpp
+.. code-block:: none
 
     memnew( Class / Class(args) )
     memdelete( instance )
@@ -107,18 +107,18 @@ For dynamic memory, the PoolVector<> template is provided. PoolVector is a
 standard vector class, and is very similar to vector in the C++ standard library.
 To create a PoolVector buffer, use this:
 
-.. code:: cpp
+.. code-block:: cpp
 
     PoolVector<int> data;
 
 PoolVector can be accessed using the [] operator and a few helpers exist for this:
 
-.. code:: cpp
+.. code-block:: cpp
 
     PoolVector<int>::Read r = data.read()
     int someint = r[4]
 
-.. code:: cpp
+.. code-block:: cpp
 
     PoolVector<int>::Write w = data.write()
     w[4] = 22;
@@ -149,10 +149,10 @@ in C++ are often inlined and make the binary size much fatter, both in
 debug symbols and code. List, Set and Map can be iterated using
 pointers, like this:
 
-.. code:: cpp
+.. code-block:: cpp
 
     for(List<int>::Element *E=somelist.front();E;E=E->next()) {
-        print_line(E->get()); //print the element
+        print_line(E->get()); // print the element
     }
 
 The Vector<> class also has a few nice features:
@@ -165,10 +165,10 @@ The Vector<> class also has a few nice features:
 References:
 ~~~~~~~~~~~
 
--  `core/vector.h <https://github.com/godotengine/godot/blob/master/core/vector.h>`__
--  `core/list.h <https://github.com/godotengine/godot/blob/master/core/list.h>`__
--  `core/set.h <https://github.com/godotengine/godot/blob/master/core/set.h>`__
--  `core/map.h <https://github.com/godotengine/godot/blob/master/core/map.h>`__
+-  `core/templates/vector.h <https://github.com/godotengine/godot/blob/master/core/templates/vector.h>`__
+-  `core/templates/list.h <https://github.com/godotengine/godot/blob/master/core/templates/list.h>`__
+-  `core/templates/set.h <https://github.com/godotengine/godot/blob/master/core/templates/set.h>`__
+-  `core/templates/map.h <https://github.com/godotengine/godot/blob/master/core/templates/map.h>`__
 
 String
 ------
@@ -181,7 +181,7 @@ conversion and visualization.
 References:
 ~~~~~~~~~~~
 
--  `core/ustring.h <https://github.com/godotengine/godot/blob/master/core/ustring.h>`__
+-  `core/string/ustring.h <https://github.com/godotengine/godot/blob/master/core/string/ustring.h>`__
 
 StringName
 ----------
@@ -197,7 +197,7 @@ is fast.
 References:
 ~~~~~~~~~~~
 
--  `core/string_name.h <https://github.com/godotengine/godot/blob/master/core/string_name.h>`__
+-  `core/string/string_name.h <https://github.com/godotengine/godot/blob/master/core/string/string_name.h>`__
 
 Math types
 ----------
@@ -219,7 +219,7 @@ referencing them fast.
 References:
 ~~~~~~~~~~~
 
--  `core/node_path.h <https://github.com/godotengine/godot/blob/master/core/node_path.h>`__
+-  `core/string/node_path.h <https://github.com/godotengine/godot/blob/master/core/string/node_path.h>`__
 
 RID
 ---
@@ -232,4 +232,4 @@ referenced data.
 References:
 ~~~~~~~~~~~
 
--  `core/rid.h <https://github.com/godotengine/godot/blob/master/core/rid.h>`__
+-  `core/templates/rid.h <https://github.com/godotengine/godot/blob/master/core/templates/rid.h>`__

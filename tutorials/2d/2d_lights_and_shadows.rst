@@ -14,7 +14,7 @@ to make a scene like the demo step by step.
 .. image:: img/light_shadow_main.png
 
 All the resources for this tutorial can be found in the `official demo repository <https://github.com/godotengine/godot-demo-projects>`_
-on github. I suggest you download it before starting. Alternatively,
+on GitHub. I suggest you download it before starting. Alternatively,
 it can be downloaded from the Project Manager. Launch Godot and in the top
 bar select "Templates" and search for "2D Lights and Shadows Demo".
 
@@ -25,7 +25,7 @@ For this demo we use four textures: two for the lights, one for the shadow caste
 and one for the background. I've included links to them all here if you want to download them
 separately from the demo.
 
-The first is the background image (`bg.png <https://raw.githubusercontent.com/godotengine/godot-demo-projects/master/2d/lights_and_shadows/bg.png>`_)
+The first is the background image (`background.png <https://raw.githubusercontent.com/godotengine/godot-demo-projects/master/2d/lights_and_shadows/background.png>`_)
 used in the demo. You do not necessarily need a background, but we use one for the demo.
 
 The second is a plain black image (`caster.png <https://raw.githubusercontent.com/godotengine/godot-demo-projects/master/2d/lights_and_shadows/caster.png>`_)
@@ -110,7 +110,7 @@ Step by step
 Now that we have covered the basics of the nodes being used, we can now walk step by step through
 the process of making a scene like the one found in the demo.
 
-First add a :ref:`Sprite <class_Sprite>` and set its texture to the `background image <https://raw.githubusercontent.com/godotengine/godot-demo-projects/master/2d/lights_and_shadows/bg.png>`_. For your game this can be any
+First add a :ref:`Sprite <class_Sprite>` and set its texture to the `background image <https://raw.githubusercontent.com/godotengine/godot-demo-projects/master/2d/lights_and_shadows/background.png>`_. For your game this can be any
 background you choose. For this style of shadow it is most likely to be a floor texture.
 
 .. image:: img/light_shadow_background.png
@@ -132,11 +132,11 @@ node, which is why we want the blob to be centered on its parent :ref:`Light <cl
 
 .. note:: At the time of writing, 3.0 is the stable release version. The 3.1 development branch contains
           many changes to the animation system, so the animations in the demo will not be covered here.
-          See :ref:`doc_introduction_2d_animation` for more information.
+          See :ref:`doc_introduction_animation` for more information.
 
 Right now the scene should look too bright. This is because all three lights are adding color to the scene.
 This is why the demo uses a :ref:`CanvasModulate <class_CanvasModulate>` in the scene. The
-:ref:`CanvasModulate <class_CanvasModulate>` multiples the entire viewport by a specific color.
+:ref:`CanvasModulate <class_CanvasModulate>` multiplies the entire viewport by a specific color.
 
 Add a :ref:`CanvasModulate <class_CanvasModulate>` to the scene and set its color to ``rgb(70, 70, 70)``.
 This will make the scene sufficiently dark to see the effects of the lights distinctly.

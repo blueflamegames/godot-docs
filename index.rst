@@ -7,10 +7,6 @@ Godot Docs – *master* branch
             Expand the "Read the Docs" panel at the bottom of the sidebar to see
             the list.
 
-  .. attention:: This is the documentation for the development (master) branch.
-                 Looking for the documentation of the current **stable** branch?
-                 `Have a look here <https://docs.godotengine.org/en/stable>`_.
-
 .. only:: i18n
 
   .. note:: This documentation is translated from the `original English one
@@ -26,14 +22,29 @@ Godot Docs – *master* branch
             the "latest" (development) branch, but should be suitable to learn
             how to use stable Godot releases nevertheless.
 
-Welcome to the official documentation of Godot Engine, the free and open source
-community-driven 2D and 3D game engine! If you are new to this documentation,
-we recommend that you read the :ref:`introduction page <doc_about_intro>` to
-get an overview of what this documentation has to offer.
+Welcome to the official documentation of `Godot Engine <https://godotengine.org>`__,
+the free and open source community-driven 2D and 3D game engine! If you are new
+to this documentation, we recommend that you read the
+:ref:`introduction page <doc_about_intro>` to get an overview of what this
+documentation has to offer.
 
 The table of contents below and in the sidebar should let you easily access the
 documentation for your topic of interest. You can also use the search function
-in the top left corner.
+in the top-left corner.
+
+To browse the documentation offline, you can use the mirror of the documentation
+hosted on `DevDocs <https://devdocs.io/godot/>`__. To enable offline browsing on
+DevDocs, you need to:
+
+- Click the three dots in the top-left corner, choose **Preferences**.
+- Enable the desired version of the Godot documentation by checking the box
+  next to it in the sidebar.
+- Click the three dots in the top-left corner, choose **Offline data**.
+- Click the **Install** link next to the Godot documentation.
+
+You can also `download an HTML copy <https://nightly.link/godotengine/godot-docs/workflows/build_offline_docs/master/godot-docs-html.zip>`__
+for offline reading (updated every Monday). Extract the ZIP archive then open
+the top-level ``index.html`` in a web browser.
 
 .. note:: Godot Engine is an open source project developed by a community of
           volunteers. The documentation team can always use your
@@ -48,13 +59,10 @@ in the top left corner.
           <https://hosted.weblate.org/engage/godot-engine/>`_ into your
           language, or talk to us on either the ``#documentation``
           channel on `Discord <https://discord.gg/zH7NUgz>`_, or the
-          ``#godotengine-doc`` channel on `irc.freenode.net
-          <http://webchat.freenode.net/?channels=#godotengine-doc>`_!
+          ``#documentation`` channel on the `Godot Contributors Chat
+          <https://chat.godotengine.org/>`_!
 
-.. image:: https://hosted.weblate.org/widgets/godot-engine/-/godot-docs/287x66-white.png
-    :alt: Translation state
-    :align: center
-    :target: https://hosted.weblate.org/engage/godot-engine/?utm_source=widget
+.. centered:: |weblate_widget|
 
 The main documentation for the site is organized into the following sections:
 
@@ -71,12 +79,13 @@ The main documentation for the site is organized into the following sections:
    :caption: Getting started
    :name: sec-learn
 
+   getting_started/introduction/index
    getting_started/step_by_step/index
-   getting_started/editor/index
-   getting_started/scripting/index
-   getting_started/workflow/index
+   getting_started/first_2d_game/index
+   getting_started/first_3d_game/index
 
 
+.. The sections below are sorted alphabetically. Please keep them that way.
 .. toctree::
    :maxdepth: 1
    :caption: Tutorials
@@ -84,25 +93,26 @@ The main documentation for the site is organized into the following sections:
 
    tutorials/2d/index
    tutorials/3d/index
-   tutorials/audio/index
-   tutorials/physics/index
-   tutorials/math/index
    tutorials/animation/index
+   tutorials/assets_pipeline/index
+   tutorials/audio/index
+   tutorials/best_practices/index
+   tutorials/editor/index
+   tutorials/export/index
+   tutorials/i18n/index
    tutorials/inputs/index
    tutorials/io/index
-   tutorials/i18n/index
-   tutorials/gui/index
-   tutorials/viewports/index
-   tutorials/shading/index
+   tutorials/math/index
    tutorials/networking/index
-   tutorials/assetlib/index
-   tutorials/vr/index
-   tutorials/plugins/index
+   tutorials/performance/index
+   tutorials/physics/index
    tutorials/platform/index
-   tutorials/threads/index
-   tutorials/content/index
-   tutorials/misc/index
-   tutorials/debug/index
+   tutorials/plugins/index
+   tutorials/rendering/index
+   tutorials/scripting/index
+   tutorials/shaders/index
+   tutorials/ui/index
+   tutorials/vr/index
 
 
 .. toctree::
@@ -112,6 +122,7 @@ The main documentation for the site is organized into the following sections:
 
    development/compiling/index
    development/cpp/index
+   development/editor/index
    development/file_formats/index
 
 
@@ -121,6 +132,7 @@ The main documentation for the site is organized into the following sections:
    :name: sec-community
 
    community/contributing/index
+   community/asset_library/index
    community/channels
    community/tutorials
 

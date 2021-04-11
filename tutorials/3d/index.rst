@@ -7,8 +7,8 @@
 
    introduction_to_3d
    using_transforms
-   3d_performance_and_limitations
-   spatial_material
+   3d_rendering_limitations
+   standard_material_3d
    lights_and_shadows
    reflection_probes
    gi_probes
@@ -18,5 +18,4 @@
    using_gridmaps
    using_multi_mesh_instance
    csg_tools
-   fps_tutorial/index
-   vertex_animation/index
+   procedural_geometry/index

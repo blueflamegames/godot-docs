@@ -3,7 +3,7 @@
 Environment and post-processing
 ===============================
 
-Godot 3 provides a redesigned Environment resource, as well as a brand new
+Godot 3 provides a redesigned Environment resource, as well as a new
 post-processing system with many available effects right out of the box.
 
 Environment
@@ -94,7 +94,8 @@ Here is a comparison of how different ambient light affects a scene:
 
 .. image:: img/environment_ambient2.png
 
-Finally there is an **Energy** setting, which is a multiplier, useful when working with HDR.
+Finally, there is an **Energy** setting, which is a multiplier. It's useful when
+working with HDR.
 
 In general, ambient light should only be used for simple scenes, large exteriors,
 or for performance reasons (ambient light is cheap), as it does not provide the
@@ -136,6 +137,8 @@ In practice, it makes light stand out more across the fog.
 Tonemap
 ^^^^^^^
 
+*This feature is only available when using the GLES3 backend.*
+
 Selects the tone-mapping curve that will be applied to the scene, from a short
 list of standard curves used in the film and game industry. Tone mapping can make
 light and dark areas more homogeneous, even though the result is not that strong.
@@ -147,6 +150,8 @@ Tone mapping options are:
 
 Auto Exposure (HDR)
 ^^^^^^^^^^^^^^^^^^^
+
+*This feature is only available when using the GLES3 backend.*
 
 Even though, in most cases, lighting and texturing are heavily artist controlled,
 Godot supports a simple high dynamic range implementation with the auto exposure
@@ -188,6 +193,8 @@ in the Environment.
 Screen-Space Reflections (SSR)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+*This feature is only available when using the GLES3 backend.*
+
 While Godot supports three sources of reflection data (Sky, ReflectionProbe, and
 GIProbe), they may not provide enough detail for all situations. Scenarios
 where Screen Space Reflections make the most sense are when objects are in
@@ -211,6 +218,8 @@ Keep in mind that screen-space-reflections only work for reflecting opaque geome
 
 Screen-Space Ambient Occlusion (SSAO)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+*This feature is only available when using the GLES3 backend.*
 
 As mentioned in the **Ambient** section, areas where light from light nodes
 does not reach (either because it's outside the radius or shadowed) are lit
@@ -248,6 +257,7 @@ Tweaking SSAO is possible with several parameters:
 - **Radius2/Intensity2:** A Secondary radius/intensity can be used. Combining a large and a small radius AO generally works well.
 - **Bias:** This can be tweaked to solve self occlusion, though the default generally works well enough.
 - **Light Affect:** SSAO only affects ambient light, but increasing this slider can make it also affect direct light. Some artists prefer this effect.
+- **Ao Channel Affect:** If a value of zero is used, only the material's AO texture will be used for ambient occlusion; SSAO will not be applied. Values greater than 0 multiply the AO texture by the SSAO effect to varying degrees. This does not affect materials without an AO texture.
 - **Quality:** Depending on quality, SSAO will take more samples over a sphere for every pixel. High quality only works well on modern GPUs.
 - **Blur:** Type of blur kernel used. The 1x1 kernel is a simple blur that preserves local detail better, but is not as efficient (generally works better with the high quality setting above), while 3x3 will soften the image better (with a bit of dithering-like effect), but does not preserve local detail as well.
 - **Edge Sharpness**: This can be used to preserve the sharpness of edges (avoids areas without AO on creases).
@@ -327,10 +337,21 @@ interesting glow patterns:
 .. image:: img/environment_glow_layers2.png
 
 Finally, as the highest layers are created by stretching small blurred images,
-it is possible that some blockiness may be visible. Enabling **Bicubic Upscaling**
+The effect may appear blocky. Enabling **Bicubic Upscale**
 gets rids of it, at a minimal performance cost.
 
 .. image:: img/environment_glow_bicubic.png
+
+.. note::
+
+    When using the GLES2 backend, bicubic upscale is only supported on
+    graphics cards that provide the ``GL_EXT_gpu_shader4`` extension. Nearly all
+    desktop and laptop graphics cards provide this extension, but not all mobile
+    GPUs do.
+
+    Also, note that GLES2 does not support High Dynamic Range (HDR) rendering. As a
+    result, you will need different glow settings compared to GLES3 to get a
+    good-looking glow.
 
 Adjustments
 ^^^^^^^^^^^

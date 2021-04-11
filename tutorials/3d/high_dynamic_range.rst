@@ -1,7 +1,7 @@
 .. _doc_high_dynamic_range:
 
-High dynamic range
-==================
+High dynamic range lighting
+===========================
 
 Introduction
 ------------
@@ -11,155 +11,108 @@ looks at their awesome looking model in the 3D DCC and says "looks
 fantastic, ready for integration!" then goes into the game, lighting is
 setup and the game runs.
 
-So at what point does all this HDR business come into play? The idea is that
-instead of dealing with colors that go from black to white (0 to 1), we
-use colors whiter than white (for example, 0 to 8 times white).
+So at what point does all this "HDR" business come into play? To understand
+the answer, we need to look at how displays behave.
 
-To be more practical, imagine that in a regular scene, the intensity
-of a light (generally 1.0) is set to 5.0. The whole scene will turn
-very bright (towards white) and look horrible.
+Your display outputs linear light ratios from some maximum to some minimum
+intensity. Modern game engines perform complex math on linear light values in
+their respective scenes. So what's the problem?
 
-After this, the luminance of the scene is computed by averaging the
-luminance of every pixel of it, and this value is used to bring the
-scene back to normal ranges. This last operation is called
-tone-mapping. Finally, we are at a similar place from where we
-started:
+The display has a limited range of intensity, depending on the display type.
+The game engine renders to an unlimited range of intensity values, however.
+While "maximum intensity" means something to an sRGB display, it has no bearing
+in the game engine; there is only a potentially infinitely wide range
+of intensity values generated per frame of rendering.
 
-.. image:: img/hdr_tonemap.png
+This means that some transformation of the scene light intensity, also known
+as *scene-referred* light ratios, need to be transformed and mapped to fit
+within the particular output range of the chosen display. This can be most
+easily understood if we consider virtually photographing our game engine scene
+through a virtual camera. Here, our virtual camera would apply a particular
+camera rendering transform to the scene data, and the output would be ready
+for display on a particular display type.
 
-Except the scene is more contrasted because there is a higher light
-range at play. What is this all useful for? The idea is that the scene
-luminance will change while you move through the world, allowing
-situations like this to happen:
+.. note::
 
-.. image:: img/hdr_cave.png
+    Godot does not support high dynamic range *output* yet. It can only perform
+    lighting in HDR and tonemap the result to a low dynamic range image.
 
-Additionally, it is possible to set a threshold value to send to the
-glow buffer depending on the pixel luminance. This allows for more
-realistic light bleeding effects in the scene.
+    For advanced users, it is still possible to get a non-tonemapped image
+    of the viewport with full HDR data, which can then be saved to an OpenEXR file.
 
-Linear color space
-------------------
+Computer displays
+-----------------
 
-The problem with this technique is that computer monitors apply a
-gamma curve to adapt better to the way the human eye sees. Artists
-create their art on the screen too, so their art has an implicit gamma
-curve applied to it.
+Almost all displays require a nonlinear encoding for the code values sent
+to them. The display in turn, using its unique transfer characteristic,
+"decodes" the code value into linear light ratios of output, and projects
+the ratios out of the uniquely colored lights at each reddish, greenish,
+and blueish emission site.
 
-The color space where images created on computer monitors exist is
-called "sRGB". All visual content that people have on their computers
-or download from the internet (such as pictures, movies, etc.)
-is in this colorspace.
+For a majority of computer displays, the specifications of the display are
+outlined in accordance with IEC 61966-2-1, also known as the
+1996 sRGB specification. This specification outlines how an sRGB display
+is to behave, including the color of the lights in the LED pixels as well as
+the transfer characteristics of the input (OETF) and output (EOTF).
+
+Not all displays use the same OETF and EOTF as a computer display.
+For example, television broadcast displays use the BT.1886 EOTF.
+However, Godot currently only supports sRGB displays.
+
+The sRGB standard is based around the nonlinear relationship between the current
+to light output of common desktop computing CRT displays.
 
 .. image:: img/hdr_gamma.png
 
-The mathematics of HDR require that we multiply the scene by different
-values to adjust the luminance and exposure to different light ranges,
-and this curve gets in the way, as we need colors in linear space for
-this.
+The mathematics of a scene-referred model require that we multiply the scene by
+different values to adjust the intensities and exposure to different
+light ranges. The transfer function of the display can't appropriately render
+the wider dynamic range of the game engine's scene output using the simple
+transfer function of the display. A more complex approach to encoding
+is required.
 
-Linear color space & asset pipeline
------------------------------------
+Scene linear & asset pipelines
+------------------------------
 
-Working in HDR is not just pressing a switch. First, imported image
-assets must be converted to linear space on import. There are two ways
-to do this:
+Working in scene-linear sRGB is not as simple as just pressing a switch. First,
+imported image assets must be converted to linear light ratios on import. Even
+when linearized, those assets may not be perfectly well-suited for use
+as textures, depending on how they were generated.
 
-sRGB -> linear conversion on image import
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+There are two ways to do this:
 
-This is the most compatible way of using linear-space assets, and it will
-work everywhere, including all mobile devices. The main issue with this
-is loss of quality, as sRGB exists to avoid this same problem. Using 8
-bits per channel to represent linear colors is inefficient from the
-point of view of the human eye. These textures might later be compressed
-too, which makes the problem worse.
+sRGB transfer function to display linear ratios on image import
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In any case, though, this is the easy solution that works everywhere.
+This is the easiest method of using sRGB assets, but it's not the most ideal.
+One issue with this is loss of quality. Using 8 bits per channel to represent
+linear light ratios is not sufficient to quantize the values correctly.
+These textures may also be compressed later, which can exacerbate the problem.
 
-Hardware sRGB -> linear conversion
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Hardware sRGB transfer function to display linear conversion
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is the most correct way to use assets in linear-space, as the
-texture sampler on the GPU will do the conversion after reading the
-texel using floating point. This works fine on PC and consoles, but most
-mobile devices do no support it, or do not support it on compressed
-texture format (iOS for example).
+The GPU will do the conversion after reading the texel using floating-point.
+This works fine on PC and consoles, but most mobile devices don't support it,
+or they don't support it on compressed texture formats (iOS for example).
 
-Linear -> sRGB at the end
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Scene linear to display-referred nonlinear
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After all the rendering is done, the linear-space rendered image must be
-converted back to sRGB. To do this, simply enable sRGB conversion in the
-current :ref:`Environment <class_Environment>` (more on that below).
+After all the rendering is done, the scene linear render requires transforming
+to a suitable output such as an sRGB display. To do this, enable sRGB conversion
+in the current :ref:`Environment <class_Environment>` (more on that below).
 
-Keep in mind that sRGB -> Linear and Linear -> sRGB conversions
-must always be **both** enabled. Failing to enable one of them will
+Keep in mind that the **sRGB -> Display Linear** and **Display Linear -> sRGB**
+conversions must always be **both** enabled. Failing to enable one of them will
 result in horrible visuals suitable only for avant-garde experimental
 indie games.
 
 Parameters of HDR
 -----------------
 
-HDR is found in the :ref:`Environment <class_Environment>`
-resource. These are found most of the time inside a
+HDR settings can be found in the :ref:`Environment <class_Environment>`
+resource. Most of the time, these are found inside a
 :ref:`WorldEnvironment <class_WorldEnvironment>`
-node or set in a camera. There are many parameters for HDR:
-
-.. image:: img/hdr_parameters.png
-
-ToneMapper
-~~~~~~~~~~
-
-The ToneMapper is the heart of the algorithm. Many options for
-tonemappers are provided:
-
--  **Linear:** Simplest tonemapper. It does its job for adjusting scene
-   brightness, but if the differences in light are too big, it will
-   cause colors to be too saturated.
--  **Log:** Similar to linear but not as extreme.
--  **Reinhardt:** Classical tonemapper (modified, so it will not desaturate
-   as much)
--  **ReinhardtAutoWhite:** Same as above, but uses the max scene luminance
-   to adjust the white value.
-
-Exposure
-~~~~~~~~
-
-The same exposure parameter as in real cameras. Controls how much light
-enters the camera. Higher values will result in a brighter scene, and
-lower values will result in a darker scene.
-
-White
-~~~~~
-
-Maximum value of white.
-
-Glow threshold
-~~~~~~~~~~~~~~
-
-Determines above which value (from 0 to 1 after the scene is tonemapped)
-light will start bleeding.
-
-Glow scale
-~~~~~~~~~~
-
-Determines how much light will bleed.
-
-Min luminance
-~~~~~~~~~~~~~
-
-Lower bound value of light for the scene at which the tonemapper stops
-working. This allows dark scenes to remain dark.
-
-Max luminance
-~~~~~~~~~~~~~
-
-Upper bound value of light for the scene at which the tonemapper stops
-working. This allows bright scenes to remain saturated.
-
-Exposure adjustment speed
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Auto-exposure will change slowly and will take a while to adjust (like
-in real cameras). Bigger values mean faster adjustment.
+node or set in a Camera node. For more information, see
+:ref:`doc_environment_and_post_processing`.

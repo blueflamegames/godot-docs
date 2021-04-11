@@ -40,7 +40,7 @@ This could be done by first rotating in *X*, then *Y* and then in *Z*. Alternati
 but depending on the order, the final orientation of the object will *not necessarily be the same*. Indeed, this means that there are several ways to construct an orientation
 from 3 different angles, depending on *the order of the rotations*.
 
-Following is a visualization of rotation axes (in X,Y,Z order) in a gimbal (from Wikipedia). As you can see, the orientation of each axis depends on the rotation of the previous one:
+Following is a visualization of rotation axes (in X, Y, Z order) in a gimbal (from Wikipedia). As you can see, the orientation of each axis depends on the rotation of the previous one:
 
 .. image:: img/transforms_gimbal.gif
 
@@ -334,7 +334,7 @@ Example of looking around, FPS style:
 
     public override void _Input(InputEvent @event)
     {
-        if (mouseMotion is InputEventMouseMotion mouseMotion)
+        if (@event is InputEventMouseMotion mouseMotion)
         {
             // modify accumulated mouse rotation
             _rotationX += mouseMotion.Relative.x * LookAroundSpeed;
@@ -374,13 +374,17 @@ Converting a rotation to quaternion is straightforward.
 
     // Convert basis to quaternion, keep in mind scale is lost
     var a = transform.basis.Quat();
-    var b = transform.basis.Quat();
+    var b = transform2.basis.Quat();
     // Interpolate using spherical-linear interpolation (SLERP).
     var c = a.Slerp(b, 0.5f); // find halfway point between a and b
     // Apply back
     transform.basis = new Basis(c);
 
-The :ref:`class_Quat` type reference has more information on the datatype (it can also do transform accumulation, transform points, etc., though this is used less often). If you interpolate or apply operations to quaternions many times, keep in mind they need to be eventually normalized or they also may suffer from numerical precision errors.
+The :ref:`class_Quat` type reference has more information on the datatype (it
+can also do transform accumulation, transform points, etc., though this is used
+less often). If you interpolate or apply operations to quaternions many times,
+keep in mind they need to be eventually normalized. Otherwise, they will also
+suffer from numerical precision errors.
 
 Quaternions are useful when doing camera/path/etc. interpolations, as the result will always be correct and smooth.
 

@@ -6,8 +6,12 @@ GI Probes
 Introduction
 ------------
 
+.. note:: This feature is only available when using the GLES3 backend.
+          :ref:`doc_baked_lightmaps` can be used as an alternative
+          when using the GLES2 renderer.
+
 Just like with :ref:`doc_reflection_probes`, and as stated in
-the :ref:`doc_spatial_material`, objects can show reflected or diffuse light.
+the :ref:`doc_standard_material_3d`, objects can show reflected or diffuse light.
 GI Probes are similar to Reflection Probes, but they use a different and more
 complex technique to produce indirect light and reflections.
 
@@ -45,6 +49,12 @@ Once the geometry is set up, push the Bake button that appears on the 3D editor
 toolbar to begin the pre-baking process:
 
 .. image:: img/giprobe_bake.png
+
+.. warning::
+
+    Meshes should have sufficiently thick walls to avoid light leaks (avoid
+    one-sided walls). For interior levels, enclose your level geometry in a
+    sufficiently large box and bridge the loops to close the mesh.
 
 Adding lights
 -------------
@@ -110,6 +120,9 @@ GI Probes support a few parameters for tweaking:
 - **Propagation** How much light propagates through the probe internally.
 - **Bias** Value used to avoid self-occlusion when doing voxel cone tracing, should generally be above 1.0 (1==voxel size).
 - **Normal Bias** Alternative type of bias useful for some scenes. Experiment with this one if regular bias does not work.
+- **Interior** Allows mixing with lighting from the sky.
+- **Compress** Currently broken. Do not use.
+- **Data** Contains the light baked data after baking. If you are saving the data it should be saved as a .res file.
 
 Quality
 -------

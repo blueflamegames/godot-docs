@@ -19,7 +19,7 @@ Here is a quick example, closing your game if the escape key is hit:
 
     func _unhandled_input(event):
         if event is InputEventKey:
-            if event.pressed and event.scancode == KEY_ESCAPE:
+            if event.pressed and event.keycode == KEY_ESCAPE:
                 get_tree().quit()
 
  .. code-tab:: csharp
@@ -27,7 +27,7 @@ Here is a quick example, closing your game if the escape key is hit:
     public override void _UnhandledInput(InputEvent @event)
     {
         if (@event is InputEventKey eventKey)
-            if (eventKey.Pressed && eventKey.Scancode == (int)KeyList.Escape)
+            if (eventKey.Pressed && eventKey.Keycode == (int)KeyList.Escape)
                 GetTree().Quit();
     }
 
@@ -37,14 +37,14 @@ you can define multiple keys for the same action (e.g. they keyboard escape key 
 You can then more easily change this mapping in the project settings without updating your code,
 and even build a key mapping feature on top of it to allow your game to change the key mapping at runtime!
 
-You can setup your InputMap under **Project > Project Settings > Input Map** and then use those actions like this:
+You can set up your InputMap under **Project > Project Settings > Input Map** and then use those actions like this:
 
 .. tabs::
  .. code-tab:: gdscript GDScript
 
     func _process(delta):
         if Input.is_action_pressed("ui_right"):
-            # Move right
+            # Move right.
 
  .. code-tab:: csharp
 
@@ -52,7 +52,7 @@ You can setup your InputMap under **Project > Project Settings > Input Map** and
     {
         if (Input.IsActionPressed("ui_right"))
         {
-            // Move right
+            // Move right.
         }
     }
 
@@ -82,7 +82,7 @@ received input, in order:
 2. Second, it will try to feed the input to the GUI, and see if any
    control can receive it. If so, the :ref:`Control <class_Control>` will be called via the
    virtual function :ref:`Control._gui_input() <class_Control_method__gui_input>` and the signal
-   "input_event" will be emitted (this function is re-implementable by
+   "gui_input" will be emitted (this function is re-implementable by
    script by inheriting from it). If the control wants to "consume" the
    event, it will call :ref:`Control.accept_event() <class_Control_method_accept_event>` and the event will
    not spread any more. Use the :ref:`Control.mouse_filter <class_Control_property_mouse_filter>`
@@ -115,7 +115,7 @@ specific Controls, only direct ancestors of the targeted Control node receive th
 In accordance with Godot's node-based design, this enables
 specialized child nodes to handle and consume particular events, while
 their ancestors, and ultimately the scene root, can provide more
-generalized behaviour if needed.
+generalized behavior if needed.
 
 Anatomy of an InputEvent
 ------------------------
@@ -124,14 +124,14 @@ Anatomy of an InputEvent
 anything and only contains some basic information, such as event ID
 (which is increased for each event), device index, etc.
 
-There are several specialised types of InputEvent, described in the table below:
+There are several specialized types of InputEvent, described in the table below:
 
 +-------------------------------------------------------------------+--------------------+-----------------------------------------+
 | Event                                                             | Type Index         | Description                             |
 +-------------------------------------------------------------------+--------------------+-----------------------------------------+
 | :ref:`InputEvent <class_InputEvent>`                              | NONE               | Empty Input Event.                      |
 +-------------------------------------------------------------------+--------------------+-----------------------------------------+
-| :ref:`InputEventKey <class_InputEventKey>`                        | KEY                | Contains a scancode and unicode value,  |
+| :ref:`InputEventKey <class_InputEventKey>`                        | KEY                | Contains a keycode and Unicode value,   |
 |                                                                   |                    | as well as modifiers.                   |
 +-------------------------------------------------------------------+--------------------+-----------------------------------------+
 | :ref:`InputEventMouseButton <class_InputEventMouseButton>`        | MOUSE_BUTTON       | Contains click information, such as     |
@@ -169,7 +169,7 @@ logic. This allows for:
    keyboard on PC, Joypad on console).
 -  Input to be reconfigured at run-time.
 
-Actions can be created from the Project Settings menu in the Actions
+Actions can be created from the Project Settings menu in the **Input Map**
 tab.
 
 Any event has the methods :ref:`InputEvent.is_action() <class_InputEvent_method_is_action>`,
@@ -184,18 +184,19 @@ The Input singleton has a method for this:
  .. code-tab:: gdscript GDScript
 
     var ev = InputEventAction.new()
-    # set as move_left, pressed
-    ev.set_as_action("move_left", true)
-    # feedback
+    # Set as move_left, pressed.
+    ev.action = "move_left"
+    ev.pressed = true
+    # Feedback.
     Input.parse_input_event(ev)
 
  .. code-tab:: csharp
 
     var ev = new InputEventAction();
-    // set as move_left, pressed
+    // Set as move_left, pressed.
     ev.SetAction("move_left");
     ev.SetPressed(true);
-    // feedback
+    // Feedback.
     Input.ParseInputEvent(ev);
 
 InputMap

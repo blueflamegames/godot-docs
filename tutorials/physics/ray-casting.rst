@@ -52,7 +52,7 @@ must be used.
 Use the following code in 2D:
 
 .. tabs::
- .. code-tab:: gdscript GDscript
+ .. code-tab:: gdscript GDScript
 
     func _physics_process(delta):
         var space_rid = get_world_2d().space
@@ -182,7 +182,7 @@ collision object node:
         public override void _PhysicsProcess(float delta)
         {
             var spaceState = GetWorld2d().DirectSpaceState;
-            var result = spaceState.IntersectRay(globalPosition, enemyPosition, new object[] { this });
+            var result = spaceState.IntersectRay(globalPosition, enemyPosition, new Godot.Collections.Array { this });
         }
     }
 
@@ -217,10 +217,11 @@ member variable:
         {
             var spaceState = GetWorld2d().DirectSpaceState;
             var result = spaceState.IntersectRay(globalPosition, enemyPosition,
-                            new object[] { this }, CollisionMask);
+                            new Godot.Collections.Array { this }, CollisionMask);
         }
     }
 
+See :ref:`doc_physics_introduction_collision_layer_code_example` for details on how to set the collision mask.
 
 3D ray casting from screen
 --------------------------
@@ -244,17 +245,17 @@ To obtain it using a camera, the following code can be used:
 .. tabs::
  .. code-tab:: gdscript GDScript
 
-    const ray_length = 1000
+    const RAY_LENGTH = 1000.0
 
     func _input(event):
         if event is InputEventMouseButton and event.pressed and event.button_index == 1:
               var camera = $Camera
               var from = camera.project_ray_origin(event.position)
-              var to = from + camera.project_ray_normal(event.position) * ray_length
+              var to = from + camera.project_ray_normal(event.position) * RAY_LENGTH
 
  .. code-tab:: csharp
 
-    private const float rayLength = 1000;
+    private const float RayLength = 1000.0f;
 
     public override void _Input(InputEvent @event)
     {
@@ -262,7 +263,7 @@ To obtain it using a camera, the following code can be used:
         {
             var camera = (Camera)GetNode("Camera");
             var from = camera.ProjectRayOrigin(eventMouseButton.Position);
-            var to = from + camera.ProjectRayNormal(eventMouseButton.Position) * rayLength;
+            var to = from + camera.ProjectRayNormal(eventMouseButton.Position) * RayLength;
         }
     }
 

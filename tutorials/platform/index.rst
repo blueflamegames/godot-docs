@@ -5,7 +5,7 @@ Platform-specific
    :maxdepth: 1
    :name: toc-learn-features-platform
 
-   android_in_app_purchases
-   services_for_ios
-   customizing_html5_shell
+   android/index
+   ios/index
+   platform_html5
    consoles
