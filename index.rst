@@ -42,7 +42,7 @@ DevDocs, you need to:
 - Click the three dots in the top-left corner, choose **Offline data**.
 - Click the **Install** link next to the Godot documentation.
 
-You can also `download an HTML copy <https://nightly.link/godotengine/godot-docs/workflows/build_offline_docs/master/godot-docs-html.zip>`__
+You can also `download an HTML copy <https://nightly.link/godotengine/godot-docs/workflows/build_offline_docs/master/godot-docs-html-master.zip>`__
 for offline reading (updated every Monday). Extract the ZIP archive then open
 the top-level ``index.html`` in a web browser.
 
@@ -57,8 +57,7 @@ the top-level ``index.html`` in a web browser.
           <https://github.com/godotengine/godot-docs/issues>`_,
           help us `translate the documentation
           <https://hosted.weblate.org/engage/godot-engine/>`_ into your
-          language, or talk to us on either the ``#documentation``
-          channel on `Discord <https://discord.gg/zH7NUgz>`_, or the
+          language, or talk to us on the
           ``#documentation`` channel on the `Godot Contributors Chat
           <https://chat.godotengine.org/>`_!
 
@@ -103,6 +102,7 @@ The main documentation for the site is organized into the following sections:
    tutorials/inputs/index
    tutorials/io/index
    tutorials/math/index
+   tutorials/navigation/index
    tutorials/networking/index
    tutorials/performance/index
    tutorials/physics/index
@@ -112,7 +112,7 @@ The main documentation for the site is organized into the following sections:
    tutorials/scripting/index
    tutorials/shaders/index
    tutorials/ui/index
-   tutorials/vr/index
+   tutorials/xr/index
 
 
 .. toctree::

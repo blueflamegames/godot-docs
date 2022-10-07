@@ -13,10 +13,10 @@ While this makes plugins less powerful, there are still many things you can
 do with them. Note that a plugin is similar to any scene you can already
 make, except it is created using a script to add editor functionality.
 
-This tutorial will guide you through the creation of two simple plugins so
+This tutorial will guide you through the creation of two plugins so
 you can understand how they work and be able to develop your own. The first
-will be a custom node that you can add to any scene in the project and the
-other will be a custom dock added to the editor.
+is a custom node that you can add to any scene in the project, and the
+other is a custom dock added to the editor.
 
 Creating a plugin
 ~~~~~~~~~~~~~~~~~
@@ -41,7 +41,10 @@ You will see the dialog appear, like so:
 The placeholder text in each field describes how it affects the plugin's
 creation of the files and the config file's values.
 
-To continue with the example, use the following values::
+To continue with the example, use the following values:
+
+.. tabs::
+ .. code-tab:: ini GDScript
 
     Plugin Name: My Custom Node
     Subfolder: my_custom_node
@@ -52,11 +55,29 @@ To continue with the example, use the following values::
     Script Name: custom_node.gd
     Activate now: No
 
+ .. code-tab:: ini C#
+
+    Plugin Name: My Custom Node
+    Subfolder: my_custom_node
+    Description: A custom node made to extend the Godot Engine.
+    Author: Your Name Here
+    Version: 1.0.0
+    Language: C#
+    Script Name: CustomNode.cs
+    Activate now: No
+
+.. warning::
+
+    Unchecking the ``Activate now?`` option in C# is always required because,
+    like every other C# script, the EditorPlugin script needs to be compiled which
+    requires building the project. After building the project the plugin can be
+    enabled in the ``Plugins`` tab of ``Project Settings``.
+
 You should end up with a directory structure like this:
 
 .. image:: img/making_plugins-my_custom_mode_folder.png
 
-``plugin.cfg`` is a simple INI file with metadata about your plugin.
+``plugin.cfg`` is an INI file with metadata about your plugin.
 The name and description help people understand what it does.
 Your name helps you get properly credited for your work.
 The version number helps others know if they have an outdated version;
@@ -69,12 +90,13 @@ The script file
 
 Upon creation of the plugin, the dialog will automatically open the
 EditorPlugin script for you. The script has two requirements that you cannot
-change: it must be a ``tool`` script, or else it will not load properly in the
+change: it must be a ``@tool`` script, or else it will not load properly in the
 editor, and it must inherit from :ref:`class_EditorPlugin`.
 
 .. warning::
+
     In addition to the EditorPlugin script, any other GDScript that your plugin uses
-    must *also* be a tool.  Any GDScript without ``tool`` imported into the editor
+    must *also* be a tool. Any GDScript without ``@tool`` imported into the editor
     will act like an empty file!
 
 It's important to deal with initialization and clean-up of resources.
@@ -88,7 +110,7 @@ like this:
 .. tabs::
  .. code-tab:: gdscript GDScript
 
-    tool
+    @tool
     extends EditorPlugin
 
 
@@ -145,22 +167,22 @@ To create a new node type, you can use the function
 :ref:`class_EditorPlugin` class. This function can add new types to the editor
 (nodes or resources). However, before you can create the type, you need a script
 that will act as the logic for the type. While that script doesn't have to use
-the ``tool`` keyword, it can be added so the script runs in the editor.
+the ``@tool`` annotation, it can be added so the script runs in the editor.
 
-For this tutorial, we'll create a simple button that prints a message when
-clicked. For that, we'll need a simple script that extends from
+For this tutorial, we'll create a button that prints a message when
+clicked. For that, we'll need a script that extends from
 :ref:`class_Button`. It could also extend
 :ref:`class_BaseButton` if you prefer:
 
 .. tabs::
  .. code-tab:: gdscript GDScript
 
-    tool
+    @tool
     extends Button
 
 
     func _enter_tree():
-        connect("pressed", self, "clicked")
+        pressed.connect(clicked)
 
 
     func clicked():
@@ -176,10 +198,10 @@ clicked. For that, we'll need a simple script that extends from
     {
         public override void _EnterTree()
         {
-            Connect("pressed", this, "clicked");
+            Pressed += Clicked;
         }
 
-        public void clicked()
+        public void Clicked()
         {
             GD.Print("You clicked me!");
         }
@@ -199,7 +221,7 @@ dialog. For that, change the ``custom_node.gd`` script to the following:
 .. tabs::
  .. code-tab:: gdscript GDScript
 
-    tool
+    @tool
     extends EditorPlugin
 
 
@@ -315,7 +337,7 @@ The script could look like this:
 .. tabs::
  .. code-tab:: gdscript GDScript
 
-    tool
+    @tool
     extends EditorPlugin
 
 
@@ -325,8 +347,8 @@ The script could look like this:
 
     func _enter_tree():
         # Initialization of the plugin goes here.
-        # Load the dock scene and instance it.
-        dock = preload("res://addons/my_custom_dock/my_dock.tscn").instance()
+        # Load the dock scene and instantiate it.
+        dock = preload("res://addons/my_custom_dock/my_dock.tscn").instantiate()
 
         # Add the loaded scene to the docks.
         add_control_to_dock(DOCK_SLOT_LEFT_UL, dock)
@@ -353,7 +375,7 @@ The script could look like this:
 
         public override void _EnterTree()
         {
-            dock = (Control)GD.Load<PackedScene>("addons/my_custom_dock/my_dock.tscn").Instance();
+            dock = (Control)GD.Load<PackedScene>("addons/my_custom_dock/my_dock.tscn").Instantiate();
             AddControlToDock(DockSlot.LeftUl, dock);
         }
 
@@ -398,3 +420,35 @@ C++ modules.
 You can make your own plugins to help yourself and share them in the
 `Asset Library <https://godotengine.org/asset-library/>`_ so that people
 can benefit from your work.
+
+.. _doc_making_plugins_autoload:
+
+Registering autoloads/singletons in plugins
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is possible for editor plugins to automatically register
+:ref:`autoloads <doc_singletons_autoload>` when the plugin is enabled.
+This also includes unregistering the autoload when the plugin is disabled.
+
+This makes setting up plugins faster for users, as they no longer have to manually
+add autoloads to their project settings if your editor plugin requires the use of
+an autoload.
+
+Use the following code to register a singleton from an editor plugin:
+
+::
+
+    @tool
+    extends EditorPlugin
+
+    # Replace this value with a PascalCase autoload name, as per the GDScript style guide.
+    const AUTOLOAD_NAME = "SomeAutoload"
+
+
+    func _enter_tree():
+        # The autoload can be a scene or script file.
+        add_autoload_singleton(AUTOLOAD_NAME, "res://addons/my_addon/some_autoload.tscn")
+
+
+    func _exit_tree():
+        remove_autoload_singleton(AUTOLOAD_NAME)

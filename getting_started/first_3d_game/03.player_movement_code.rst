@@ -22,9 +22,9 @@ character.
    extends KinematicBody
 
    # How fast the player moves in meters per second.
-   export var speed = 14
+   @export var speed = 14
    # The downward acceleration when in the air, in meters per second squared.
-   export var fall_acceleration = 75
+   @export var fall_acceleration = 75
 
    var velocity = Vector3.ZERO
 
@@ -40,10 +40,10 @@ character.
         // The downward acceleration when in the air, in meters per second squared.
         [Export]
         public int FallAcceleration = 75;
- 
+
         private Vector3 _velocity = Vector3.Zero;
     }
- 
+
 
 These are common properties for a moving body. The ``velocity`` is a 3D vector
 combining a speed with a direction. Here, we define it as a property because
@@ -236,9 +236,9 @@ Here is the complete ``Player.gd`` code for reference.
    extends KinematicBody
 
    # How fast the player moves in meters per second.
-   export var speed = 14
+   @export var speed = 14
    # The downward acceleration when in the air, in meters per second squared.
-   export var fall_acceleration = 75
+   @export var fall_acceleration = 75
 
    var velocity = Vector3.ZERO
 
@@ -317,7 +317,6 @@ Here is the complete ``Player.gd`` code for reference.
             _velocity = MoveAndSlide(_velocity, Vector3.Up);
         }
     }
- 
 
 Testing our player's movement
 -----------------------------
@@ -362,7 +361,7 @@ Let's first split the 3D view to be able to freely navigate the scene and see
 what the camera sees.
 
 In the toolbar right above the viewport, click on *View*, then *2 Viewports*.
-You can also press :kbd:`Ctrl + 2` (:kbd:`Cmd + 2` on MacOS).
+You can also press :kbd:`Ctrl + 2` (:kbd:`Cmd + 2` on macOS).
 
 |image5|
 
@@ -376,7 +375,7 @@ one).
 
 |image7|
 
-Here's where the magic happens. Select the *CameraPivot* and rotate it ``45``
+Here's where the magic happens. Select the *CameraPivot* and rotate it ``-45``
 degrees around the X axis (using the red circle). You'll see the camera move as
 if it was attached to a crane.
 

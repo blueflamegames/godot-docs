@@ -1,5 +1,6 @@
 name: Build documentation for offline usage
 on:
+  workflow_dispatch:
   schedule:
     # Every week on Monday at midnight (UTC).
     # This keeps the generated HTML documentation fresh.
@@ -8,9 +9,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        branch:
+          - master
+          - stable
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ matrix.branch }}
 
       - name: Install dependencies
         run: |
@@ -20,11 +28,11 @@ jobs:
       # Build the HTML to upload it.
       - name: Sphinx build
         run: |
-          sphinx-build --color -d _build/doctrees -W . _build/html
+          sphinx-build --color -d _build/doctrees . _build/html
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
-          name: godot-docs-html
+          name: godot-docs-html-${{ matrix.branch }}
           path: _build/html
           # Keep the current build and the previous build (in case a scheduled build failed).
           # This makes it more likely to have at least one successful build available at all times.

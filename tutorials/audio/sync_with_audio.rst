@@ -41,7 +41,7 @@ Add these two and it's possible to guess almost exactly when sound or music will
     var time_delay
 
 
-    func _ready()
+    func _ready():
         time_begin = OS.get_ticks_usec()
         time_delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
         $Player.play()
@@ -96,7 +96,7 @@ Adding the return value from this function to *get_playback_position()* increase
     var time = $Player.get_playback_position() + AudioServer.get_time_since_last_mix()
 
  .. code-tab:: csharp
-    
+
     double time = GetNode<AudioStreamPlayer>("Player").GetPlaybackPosition() + AudioServer.GetTimeSinceLastMix();
 
 
@@ -119,7 +119,7 @@ Here is the same code as before using this approach:
  .. code-tab:: gdscript GDScript
 
 
-    func _ready()
+    func _ready():
         $Player.play()
 
 

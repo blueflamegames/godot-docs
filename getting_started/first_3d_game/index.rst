@@ -23,7 +23,7 @@ You will learn to:
 - Code basic procedural gameplay by instancing monsters at regular time
   intervals.
 - Design a movement animation and change its speed at run-time.
-- Draw a simple interface on a 3D game.
+- Draw a user interface on a 3D game.
 
 And more.
 
@@ -54,7 +54,7 @@ Contents
 
 .. toctree::
    :maxdepth: 1
-   :name: toc-learn-introduction
+   :name: toc-learn-first_3d_game
 
    01.game_setup
    02.player_input

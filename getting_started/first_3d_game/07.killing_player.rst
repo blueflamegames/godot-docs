@@ -41,7 +41,7 @@ The wider the cylinder, the more easily the player will get killed.
 Next, select the *MobDetector* node again, and in the *Inspector*, turn
 off its *Monitorable* property. This makes it so other physics nodes
 cannot detect the area. The complementary *Monitoring* property allows
-it to detect collisions. Then, remove the *Collision -> Layer* and sets
+it to detect collisions. Then, remove the *Collision -> Layer* and set
 the mask to the "enemies" layer.
 
 |image3|
@@ -83,10 +83,10 @@ a ``die()`` function that helps us put a descriptive label on the code.
 
     // Emitted when the player was hit by a mob.
     [Signal]
-    public delegate void Hit();
+    public delegate void HitEventHandler();
 
     // ...
-    
+
     private void Die()
     {
         EmitSignal(nameof(Hit));
@@ -165,18 +165,20 @@ Starting with ``Main.gd``.
 
 
    func _on_MobTimer_timeout():
-       # Create a Mob instance and add it to the scene.
+       # Create a new instance of the Mob scene.
        var mob = mob_scene.instance()
 
-       # Choose a random location on Path2D.
+       # Choose a random location on the SpawnPath.
        var mob_spawn_location = get_node("SpawnPath/SpawnLocation")
        # And give it a random offset.
        mob_spawn_location.unit_offset = randf()
 
+       # Communicate the spawn location and the player's location to the mob.
        var player_position = $Player.transform.origin
-
-       add_child(mob)
        mob.initialize(mob_spawn_location.translation, player_position)
+
+       # Spawn the mob by adding it to the Main scene.
+       add_child(mob)
 
 
    func _on_Player_hit():
@@ -190,35 +192,36 @@ Starting with ``Main.gd``.
         [Export]
         public PackedScene MobScene;
     #pragma warning restore 649
-    
+
         public override void _Ready()
         {
             GD.Randomize();
         }
-    
+
         public void OnMobTimerTimeout()
         {
-            // Create a mob instance and add it to the scene.
+            // Create a new instance of the Mob scene.
             var mob = (Mob)MobScene.Instance();
-    
-            // Choose a random location on Path2D.
-            // We stire the reference to the SpawnLocation node.
+
+            // Choose a random location on the SpawnPath.
+            // We store the reference to the SpawnLocation node.
             var mobSpawnLocation = GetNode<PathFollow>("SpawnPath/SpawnLocation");
             // And give it a random offset.
             mobSpawnLocation.UnitOffset = GD.Randf();
-    
+
+            // Communicate the spawn location and the player's location to the mob.
             Vector3 playerPosition = GetNode<Player>("Player").Transform.origin;
-    
-            AddChild(mob);
             mob.Initialize(mobSpawnLocation.Translation, playerPosition);
+
+            // Spawn the mob by adding it to the Main scene.
+            AddChild(mob);
         }
-    
+
         public void OnPlayerHit()
         {
             GetNode<Timer>("MobTimer").Stop();
         }
     }
- 
 
 Next is ``Mob.gd``.
 
@@ -231,9 +234,9 @@ Next is ``Mob.gd``.
    signal squashed
 
    # Minimum speed of the mob in meters per second.
-   export var min_speed = 10
+   @export var min_speed = 10
    # Maximum speed of the mob in meters per second.
-   export var max_speed = 18
+   @export var max_speed = 18
 
    var velocity = Vector3.ZERO
 
@@ -243,8 +246,7 @@ Next is ``Mob.gd``.
 
 
    func initialize(start_position, player_position):
-       translation = start_position
-       look_at(player_position, Vector3.UP)
+       look_at_from_position(start_position, player_position, Vector3.UP)
        rotate_y(rand_range(-PI / 4, PI / 4))
 
        var random_speed = rand_range(min_speed, max_speed)
@@ -266,7 +268,7 @@ Next is ``Mob.gd``.
     {
         // Emitted when the played jumped on the mob.
         [Signal]
-        public delegate void Squashed();
+        public delegate void SquashedEventHandler();
 
         // Minimum speed of the mob in meters per second
         [Export]
@@ -284,8 +286,7 @@ Next is ``Mob.gd``.
 
         public void Initialize(Vector3 startPosition, Vector3 playerPosition)
         {
-            Translation = startPosition;
-            LookAt(playerPosition, Vector3.Up);
+            LookAtFromPosition(startPosition, playerPosition, Vector3.Up);
             RotateY((float)GD.RandRange(-Mathf.Pi / 4.0, Mathf.Pi / 4.0));
 
             float randomSpeed = (float)GD.RandRange(MinSpeed, MaxSpeed);
@@ -304,8 +305,7 @@ Next is ``Mob.gd``.
             QueueFree();
         }
     }
- 
- 
+
 Finally, the longest script, ``Player.gd``.
 
 .. tabs::
@@ -317,13 +317,13 @@ Finally, the longest script, ``Player.gd``.
    signal hit
 
    # How fast the player moves in meters per second.
-   export var speed = 14
+   @export var speed = 14
    # The downward acceleration when in the air, in meters per second squared.
-   export var fall_acceleration = 75
+   @export var fall_acceleration = 75
    # Vertical impulse applied to the character upon jumping in meters per second.
-   export var jump_impulse = 20
+   @export var jump_impulse = 20
    # Vertical impulse applied to the character upon bouncing over a mob in meters per second.
-   export var bounce_impulse = 16
+   @export var bounce_impulse = 16
 
    var velocity = Vector3.ZERO
 
@@ -377,7 +377,7 @@ Finally, the longest script, ``Player.gd``.
     {
         // Emitted when the player was hit by a mob.
         [Signal]
-        public delegate void Hit();
+        public delegate void HitEventHandler();
 
         // How fast the player moves in meters per second.
         [Export]
@@ -423,13 +423,13 @@ Finally, the longest script, ``Player.gd``.
 
             _velocity.x = direction.x * Speed;
             _velocity.z = direction.z * Speed;
-            
+
             // Jumping.
             if (IsOnFloor() && Input.IsActionJustPressed("jump"))
             {
                 _velocity.y += JumpImpulse;
             }
-            
+
             _velocity.y -= FallAcceleration * delta;
             _velocity = MoveAndSlide(_velocity, Vector3.Up);
 
@@ -458,7 +458,6 @@ Finally, the longest script, ``Player.gd``.
             Die();
         }
     }
-
 
 See you in the next lesson to add the score and the retry option.
 

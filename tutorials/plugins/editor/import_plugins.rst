@@ -15,11 +15,11 @@ to be imported by Godot and be treated as first-class resources. The editor
 itself comes bundled with a lot of import plugins to handle the common resources
 like PNG images, Collada and glTF models, Ogg Vorbis sounds, and many more.
 
-This tutorial will show you how to create a simple import plugin to load a
+This tutorial shows how to create an import plugin to load a
 custom text file as a material resource. This text file will contain three
 numeric values separated by comma, which represents the three channels of a
 color, and the resulting color will be used as the albedo (main color) of the
-imported material. In this example it will contain the pure blue color
+imported material. In this example it contains the pure blue color
 (zero red, zero green, and full blue):
 
 .. code-block:: none
@@ -48,7 +48,7 @@ when needed:
 ::
 
     # material_import.gd
-    tool
+    @tool
     extends EditorPlugin
 
 
@@ -90,7 +90,7 @@ Let's begin to code our plugin, one method at time:
 ::
 
     # import_plugin.gd
-    tool
+    @tool
     extends EditorImportPlugin
 
 
@@ -179,7 +179,7 @@ good practice to use an enum so you can refer to them using names.
 
 ::
 
-    tool
+    @tool
     extends EditorImportPlugin
 
 
@@ -339,7 +339,7 @@ as the value we got before.
 
 ::
 
-    return ResourceSaver.save("%s.%s" % [save_path, get_save_extension()], material)
+    return ResourceSaver.save(material, "%s.%s" % [save_path, get_save_extension()])
 
 This is the last part and quite an important one, because here we save the made
 resource to the disk. The path of the saved file is generated and informed by
@@ -375,7 +375,7 @@ would need to do something like the following:
 ::
 
     r_platform_variants.push_back("mobile")
-    return ResourceSaver.save("%s.%s.%s" % [save_path, "mobile", get_save_extension()], mobile_material)
+    return ResourceSaver.save(mobile_material, "%s.%s.%s" % [save_path, "mobile", get_save_extension()])
 
 The ``r_gen_files`` argument is meant for extra files that are generated during
 your import process and need to be kept. The editor will look at it to
@@ -392,7 +392,7 @@ in a different file:
     next_pass.albedo_color = color.inverted()
     var next_pass_path = "%s.next_pass.%s" % [save_path, get_save_extension()]
 
-    err = ResourceSaver.save(next_pass_path, next_pass)
+    err = ResourceSaver.save(next_pass, next_pass_path)
     if err != OK:
         return err
     r_gen_files.push_back(next_pass_path)

@@ -17,7 +17,7 @@ a 2D game.
           programming entirely, you should start here: :ref:`doc_scripting`.
 
 The game is called "Dodge the Creeps!". Your character must move and avoid the
-enemies for as long as possible. Here is a preview of the final result:
+enemies for as long as possible. 
 
 You will learn to:
 
@@ -37,9 +37,8 @@ recommend you to start with this one, though.
 3D games are much more complex than 2D ones. It would be best if you stuck to 2D
 until you understood the game development process and how to use Godot well.
 
-You can find a completed version of this project at these locations:
+You can find a completed version of this project at this location:
 
-- https://github.com/kidscancode/Godot3_dodge/releases
 - https://github.com/godotengine/godot-demo-projects
 
 Prerequisites
@@ -64,7 +63,7 @@ Contents
 
 .. toctree::
    :maxdepth: 1
-   :name: toc-learn-introduction
+   :name: toc-learn-first_2d_game
 
    01.project_setup
    02.player_scene

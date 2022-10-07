@@ -36,7 +36,7 @@ There are several ways to improve performance and battery life:
   which can be up to 4 times faster.
 - Open the Editor Settings and increase the value of **Low Processor Mode Sleep Usec**
   to ``33000`` (30 FPS). This value determines the amount of *microseconds*
-  between frames to render. Higher values will make the editor feel less reactive,
+  between frames to render. Higher values will make the editor feel less reactive
   but will help decrease CPU and GPU usage significantly.
 - If you have a node that causes the editor to redraw continuously (such as
   particles), hide it and show it using a script in the ``_ready()`` method.
@@ -50,12 +50,12 @@ This is a `known issue <https://github.com/godotengine/godot/issues/38219>`__.
 There are two workarounds for this:
 
 - Enable **Interface > Editor > Update Continuously** in the Editor Settings. Keep in mind
-  this will increase power usage and heat/noise emissions, since the editor will
+  this will increase power usage and heat/noise emissions since the editor will
   now be rendering constantly, even if nothing has changed on screen. To
   alleviate this, you can increase **Low Processor Mode Sleep Usec** to
   ``33000`` (30 FPS) in the Editor Settings. This value determines the amount of
   *microseconds* between frames to render. Higher values will make the editor
-  feel less reactive, but will help decrease CPU and GPU usage significantly.
+  feel less reactive but will help decrease CPU and GPU usage significantly.
 - Alternatively, disable variable refresh rate on your monitor or in the graphics driver.
 
 The grid disappears and meshes turn black when I rotate the 3D camera in the editor.
@@ -79,6 +79,13 @@ Corsair's iCUE software seems to cause the bug. Try updating your USB
 peripherals' drivers to their latest version. If the bug persists, you need to
 disconnect the faulty peripherals before opening the editor. You can then
 connect the peripheral again.
+
+Editor tooltips in the Inspector and Node docks blink when they're displayed.
+-----------------------------------------------------------------------------
+
+This is a `known issue <https://github.com/godotengine/godot/issues/32990>`__
+caused by the third-party Stardock Fences application on Windows.
+The only known workaround is to disable Stardock Fences while using Godot.
 
 The Godot editor appears frozen after clicking the system console.
 ------------------------------------------------------------------
@@ -131,7 +138,7 @@ considered resources. For example, if you load ``test.json`` in the exported
 project, you need to specify ``*.json`` in the non-resource export filter. See
 :ref:`doc_exporting_projects_export_mode` for more information.
 
-Also, note that files and folders whose name begin with a period will never be
+Also, note that files and folders whose names begin with a period will never be
 included in the exported project. This is done to prevent version control
 folders like ``.git`` from being included in the exported PCK file.
 

@@ -84,8 +84,9 @@ To ensure good collaboration and overall quality, the Godot developers
 enforce some rules for code contributions, for example regarding the style to
 use in the C++ code (indentation, brackets, etc.) or the Git and PR workflow.
 
-A good place to start is by searching for issues tagged as `junior jobs <https://github.com/godotengine/godot/issues?q=is%3Aissue+is%3Aopen+label%3A%22junior+job%22>`_
-(or `Hacktoberfest <https://github.com/godotengine/godot/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3AHacktoberfest+>`_ during October) on GitHub.
+A good place to start is by searching for issues tagged as
+`good first issue <https://github.com/godotengine/godot/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22>`_
+on GitHub.
 
 .. seealso:: Technical details about the PR workflow are outlined in a
              specific section, :ref:`doc_pr_workflow`.
@@ -180,7 +181,7 @@ always provide:
    project that reproduces this issue out of the box, zip it and attach it to
    the issue (you can do this by drag and drop).
    Even if you think that the issue is trivial to reproduce, adding a minimal
-   project that lets reproduce it is a big added value. You have to keep in
+   project that lets everyone reproduce it is a big added value. You have to keep in
    mind that there are thousands of issues in the tracker, and developers can
    only dedicate little time to each issue.
 
@@ -198,7 +199,7 @@ There are two separate resources referred to as "documentation" in Godot:
   offline, directly in Godot's code editor, or online at :ref:`Godot API
   <toc-class-ref>`. To contribute to the class reference, you have to edit the
   XML file corresponding to the class and make a pull request.
-  See :ref:`doc_updating_the_class_reference_with_git` and
+  See :ref:`doc_updating_the_class_reference` and
   :ref:`doc_class_reference_writing_guidelines` for more details.
 
 - **The tutorials and engine documentation and its translations.**

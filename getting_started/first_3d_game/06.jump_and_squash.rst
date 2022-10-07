@@ -114,7 +114,7 @@ the ``jump_impulse``.
 
    #...
    # Vertical impulse applied to the character upon jumping in meters per second.
-   export var jump_impulse = 20
+   @export var jump_impulse = 20
 
  .. code-tab:: csharp
 
@@ -212,7 +212,7 @@ when jumping.
 
    # Vertical impulse applied to the character upon bouncing over a mob in
    # meters per second.
-   export var bounce_impulse = 16
+   @export var bounce_impulse = 16
 
  .. code-tab:: csharp
 
@@ -255,7 +255,7 @@ With this code, if no collisions occurred on a given frame, the loop won't run.
     {
         // ...
 
-        for (int index = 0; i < GetSlideCount(); index++)
+        for (int index = 0; index < GetSlideCount(); index++)
         {
             // We check every collision that occurred this frame.
             KinematicCollision collision = GetSlideCollision(index);
@@ -325,7 +325,7 @@ destroy the mob.
 
     // Emitted when the played jumped on the mob.
     [Signal]
-    public delegate void Squashed();
+    public delegate void SquashedEventHandler();
 
     // ...
 

@@ -101,6 +101,8 @@ new functions:
 You can learn how to submit assets to the Library, and what the asset submission
 guidelines are, in the next part of this tutorial, :ref:`doc_submitting_to_assetlib`.
 
+.. _doc_using_assetlib_editor:
+
 In the editor
 -------------
 
@@ -134,7 +136,7 @@ Similarly to the web version of the AssetLib, here you can search
 for assets by category, name, and sort them by factors such as name or edit date.
 
 Notably, you can only fetch assets for the current version of Godot you are running.
-Projects, Demos and Templates can be downloaded from from the Project Manager
+Projects, Demos and Templates can be downloaded from the Project Manager
 view of the AssetLib. Addons (tools, scripts, materials etc.) can be downloaded from
 the in-project AssetLib and added to the current project.
 In addition, unlike when using the web frontend, the search results are updated

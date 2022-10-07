@@ -6,13 +6,13 @@ They are meant to be parsed with the [Sphinx](https://www.sphinx-doc.org/) docum
 
 ## Download for offline use
 
-You can [download an HTML copy](https://nightly.link/godotengine/godot-docs/workflows/build_offline_docs/master/godot-docs-html.zip)
+You can [download an HTML copy](https://nightly.link/godotengine/godot-docs/workflows/build_offline_docs/master/godot-docs-html-master.zip)
 for offline reading (updated every Monday). Extract the ZIP archive then open
 the top-level `index.html` in a web browser.
 
 ## Theming
 
-The Godot documentation uses the default ``sphinx_rtd_theme`` with many
+The Godot documentation uses the default `sphinx_rtd_theme` with many
 [customizations](_static/) applied on top. It will automatically switch between
 the light and dark theme depending on your browser/OS' theming preference.
 
@@ -33,7 +33,8 @@ Here are some quick links to the areas you might be interested in:
 2. [Contributing to the class reference](https://docs.godotengine.org/en/latest/community/contributing/updating_the_class_reference.html)
 3. [Content guidelines](https://docs.godotengine.org/en/latest/community/contributing/content_guidelines.html)
 4. [Writing guidelines](https://docs.godotengine.org/en/latest/community/contributing/docs_writing_guidelines.html)
-5. [Translating the documentation](https://docs.godotengine.org/en/latest/community/contributing/editor_and_docs_localization.html)
+5. [Building the manual](https://docs.godotengine.org/en/latest/community/contributing/building_the_manual.html)
+6. [Translating the documentation](https://docs.godotengine.org/en/latest/community/contributing/editor_and_docs_localization.html)
 
 ## License
 

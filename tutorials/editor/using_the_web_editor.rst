@@ -3,7 +3,7 @@
 Using the Web editor
 ====================
 
-Since Godot 3.2.4, there is a `Web editor <https://editor.godotengine.org/>`__
+Since Godot 3.3, there is a `Web editor <https://editor.godotengine.org/>`__
 you can use to work on new or existing projects.
 
 .. note::
@@ -47,6 +47,9 @@ are currently missing:
 
 - No C#/Mono support.
 - No GDNative support.
+- No debugging support. This means GDScript debugging/profiling, live scene
+  editing, the Remote Scene tree dock and other features that rely on the debugger
+  protocol will not work.
 - No project exporting. As a workaround, you can download the project source
   using **Project > Tools > Download Project Source** and export it using a
   `native version of the Godot editor <https://godotengine.org/download>`__.

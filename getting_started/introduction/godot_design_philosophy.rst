@@ -52,12 +52,15 @@ structure matches the game's design.
 Also note that Godot offers many different types of objects called
 nodes, each with a specific purpose. Nodes are part of a tree and always
 inherit from their parents up to the Node class. Although the engine
-does feature components like collision shapes, they're the
-exception, not the norm.
+does feature some nodes like collision shapes that a parent physics
+body will use, most nodes work independently from one another.
+
+In other words, Godot's nodes do not work like components in some
+other game engines.
 
 |image1|
 
-Sprite is a Node2D, a CanvasItem and a Node. It has all the properties
+Sprite2D is a Node2D, a CanvasItem and a Node. It has all the properties
 and features of its three parent classes, like transforms or the ability
 to draw custom shapes and render with a custom shader.
 
@@ -77,23 +80,17 @@ there is an import plugin for it. Or you can create one, like the `Tiled
 Map Importer <https://github.com/vnen/godot-tiled-importer>`__.
 
 That is also partly why Godot offers its own programming languages
-GDScript and VisualScript, along with C#. They're designed for the needs
+GDScript and, along with C#. They're designed for the needs
 of game developers and game designers, and they're tightly integrated in
 the engine and the editor.
 
-GDScript lets you write simple code using an indentation-based syntax,
+GDScript lets you write code using an indentation-based syntax,
 yet it detects types and offers a static language's quality of auto-completion.
 It is also optimized for gameplay code with built-in types like Vectors and Colors.
 
 Note that with GDNative, you can write high-performance code using compiled
 languages like C, C++, Rust, or Python (using the Cython compiler)
 without recompiling the engine.
-
-|image3|
-
-*VisualScript is a node-based programming language that integrates well
-in the editor. You can drag and drop nodes or resources into the graph
-to create new code blocks.*
 
 Note that the 3D workspace doesn't feature as many tools as the 2D workspace.
 You'll need external programs or add-ons to edit terrains, animate complex characters, and so on.
@@ -150,7 +147,7 @@ or run game code in the editor. This means you can **use the same code**
 and scenes for your games, or **build plugins and extend the editor.**
 
 This leads to a reliable and flexible UI system, as it powers the editor
-itself. With the ``tool`` keyword, you can run any game code in the editor.
+itself. With the ``@tool`` annotation, you can run any game code in the editor.
 
 |image5|
 
@@ -158,7 +155,7 @@ itself. With the ``tool`` keyword, you can run any game code in the editor.
 UI tools for its node-based programming system and for the rest of the
 interface.*
 
-Put the ``tool`` keyword at the top of any GDScript file and it will run
+Put the ``@tool`` annotation at the top of any GDScript file and it will run
 in the editor. This lets you import and export plugins, create plugins
 like custom level editors, or create scripts with the same nodes and API
 you use in your projects.
@@ -180,6 +177,5 @@ interfaces over your 3D world.
 .. |image0| image:: img/engine_design_01.png
 .. |image1| image:: img/engine_design_02.png
 .. |image2| image:: img/engine_design_03.png
-.. |image3| image:: img/engine_design_visual_script.png
 .. |image4| image:: img/engine_design_fsm_plugin.png
 .. |image5| image:: img/engine_design_rpg_in_a_box.png

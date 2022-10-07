@@ -35,27 +35,27 @@ page in the Mono documentation.
         `Microsoft C# guide <https://docs.microsoft.com/en-us/dotnet/csharp/index>`_
         or look for a suitable introduction elsewhere.
 
+.. _doc_c_sharp_setup:
+
 Setting up C# for Godot
 -----------------------
 
 Prerequisites
 ~~~~~~~~~~~~~
 
-Install the latest stable version of
-`.NET Core SDK <https://dotnet.microsoft.com/download/dotnet-core>`__
-(3.1 as of writing).
+Install the latest stable version of the
+`.NET SDK <https://dotnet.microsoft.com/download>`__, previously known as the
+.NET Core SDK.
 
 As of Godot 3.2.3, installing Mono SDK is not a requirement anymore,
 except it is required if you are building the engine from source.
 
-Godot bundles the parts of Mono needed to run already compiled games,
-however Godot does not include the tools required to build and compile
-games, such as MSBuild. These tools need to be installed separately.
-The required tools are included in the .NET Core SDK. MSBuild is also
-included in the Mono SDK, but it can't build C# projects with the new
-``csproj`` format, therefore .NET Core SDK is required for Godot 3.2.3+.
+Godot bundles the parts of Mono needed to run already compiled games.
+However, Godot does not bundle the tools required to build and compile
+games, such as MSBuild and the C# compiler. These are
+included in the .NET SDK, which needs to be installed separately.
 
-In summary, you must have installed .NET Core SDK
+In summary, you must have installed the .NET SDK
 **and** the Mono-enabled version of Godot.
 
 Additional notes
@@ -114,6 +114,7 @@ After reading the "Prerequisites" section, you can download and install
 In Godot's **Editor → Editor Settings** menu:
 
 - Set **Mono** -> **Editor** -> **External Editor** to **Visual Studio Code**.
+- Set **Mono** -> **Builds** -> **Build Tool** to **dotnet CLI**.
 
 In Visual Studio Code:
 
@@ -121,9 +122,16 @@ In Visual Studio Code:
 - Install the `Mono Debug <https://marketplace.visualstudio.com/items?itemName=ms-vscode.mono-debug>`__ extension.
 - Install the `C# Tools for Godot <https://marketplace.visualstudio.com/items?itemName=neikeq.godot-csharp-vscode>`__ extension.
 
+.. note:: If you are using Linux you need to install the
+          `Mono SDK <https://www.mono-project.com/download/stable/#download-lin>`__
+          for the C# tools plugin to work.
+
 To configure a project for debugging open the Godot project folder in VS Code.
-Go to the Run tab and click on **create a launch.json file**. Select **C# Godot** from the dropdown
-menu. Now, when you start the debugger in VS Code your Godot project will run.
+Go to the Run tab and click on **Add Configuration...**. Select **C# Godot**
+from the dropdown menu. Open the ``tasks.json`` and ``launch.json`` files that
+were created. Change the executable setting in ``launch.json`` and  command
+settings in ``tasks.json`` to your Godot executable path. Now, when you start
+the debugger in VS Code, your Godot project will run.
 
 Visual Studio (Windows only)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,11 +150,25 @@ While installing Visual Studio, select these workloads:
 In Godot's **Editor → Editor Settings** menu:
 
 - Set **Mono** -> **Editor** -> **External Editor** to **Visual Studio**.
+- Set **Mono** -> **Builds** -> **Build Tool** to **dotnet CLI**.
 
-Next, you need to download the Godot Visual Studio extension from github
+Next, you can download the Godot Visual Studio extension from github
 `here <https://github.com/godotengine/godot-csharp-visualstudio/releases>`__.
 Double click on the downloaded file and follow the installation process.
 
+.. note:: The option to debug your game in Visual Studio may not appear after
+          installing the extension. To enable debugging, there is a
+          `workaround for Visual Studio 2019 <https://github.com/godotengine/godot-csharp-visualstudio/issues/10#issuecomment-720153256>`__.
+          There is
+          `a separate issue about this problem in Visual Studio 2022 <https://github.com/godotengine/godot-csharp-visualstudio/issues/28>`__.
+
+.. note:: If you see an error like "Unable to find package Godot.NET.Sdk",
+          your NuGet configuration may be incorrect and need to be fixed.
+
+          A simple way to fix the NuGet configuration file is to regenerate it.
+          In a file explorer window, go to ``%AppData%\NuGet``. Rename or delete
+          the ``NuGet.Config`` file. When you build your Godot project again,
+          the file will be automatically created with default values.
 
 Creating a C# script
 --------------------

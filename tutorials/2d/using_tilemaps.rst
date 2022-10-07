@@ -1,6 +1,6 @@
 .. _doc_using_tilemaps:
 
-Using tilemaps
+Using TileMaps
 ==============
 
 Introduction
@@ -9,7 +9,7 @@ Introduction
 A tilemap is a grid of tiles used to create a game's layout. There are several
 benefits to using :ref:`TileMap <class_TileMap>` nodes to design your levels.
 First, they make it possible to draw the layout by "painting" the tiles onto a
-grid, which is much faster than placing individual :ref:`Sprite <class_Sprite>`
+grid, which is much faster than placing individual :ref:`Sprite2D <class_Sprite2D>`
 nodes one by one. Second, they allow for much larger levels because they are
 optimized for drawing large numbers of tiles. Finally, you can add collision,
 occlusion, and navigation shapes to tiles, adding additional functionality to
@@ -20,7 +20,7 @@ the TileMap.
 Project setup
 -------------
 
-This demo we'll use the following tiles taken from Kenney's "Abstract Platformer"
+This demo will use the following tiles taken from Kenney's "Abstract Platformer"
 art pack. You can find the complete set `here <https://kenney.nl/assets/abstract-platformer>`_
 but for this demo we'll stick to this small set.
 
@@ -303,7 +303,7 @@ This means the texture offset should be ``Vector2(0, -120)``:
 3x3
 ~~~
 
-In 3x3 mode, each bitmaks contains 9 bits (4 corners, 4 edges, 1 center)
+In 3x3 mode, each bitmask contains 9 bits (4 corners, 4 edges, 1 center)
 
 Each bit checks a single adjacent cell. Corner bits only check diagonally
 adjacent cells. The center bit should be "on" for any tile you wish to use.
@@ -341,7 +341,7 @@ Tips and tricks
 
 - If you're using a :ref:`Camera2D <class_Camera2D>` to scroll your level, you
   may notice lines appearing between your tiles. To fix this, open Project
-  Settings and enable "Use Pixel Snap" in the "Rendering/Quality" section.
+  Settings and enable **Use Gpu Pixel Snap** in the **Rendering > 2d > Snapping** section.
 
 - You can flip and rotate tiles using the icons at the top right of the editor.
 

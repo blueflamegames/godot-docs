@@ -33,7 +33,7 @@ About Godot Engine
 
 A game engine is a complex tool, and it is therefore difficult to present Godot
 in a few words. Here's a quick synopsis, which you are free to reuse
-if you need a quick writeup about Godot Engine.
+if you need a quick write-up about Godot Engine.
 
     Godot Engine is a feature-packed, cross-platform game engine to create 2D
     and 3D games from a unified interface. It provides a comprehensive set of
@@ -69,7 +69,7 @@ open source `Sphinx <http://www.sphinx-doc.org>`_ and `ReadTheDocs
           <https://hosted.weblate.org/projects/godot-engine/godot-docs/>`_.
 
 All the contents are under the permissive Creative Commons Attribution 3.0
-(`CC-BY 3.0 <https://creativecommons.org/licenses/by/3.0/>`_) license, with
+(`CC BY 3.0 <https://creativecommons.org/licenses/by/3.0/>`_) license, with
 attribution to "Juan Linietsky, Ariel Manzur and the Godot Engine community".
 
 Organization of the documentation
@@ -95,7 +95,7 @@ relatively intuitive:
 - The :ref:`sec-community` section gives the information related to contributing to
   the engine development and the life of its community, e.g. how to report bugs,
   help with the documentation, etc. It also points to various community channels
-  like Godot Contributors Chat and Discord and contains a list of recommended 
+  like Godot Contributors Chat and Discord and contains a list of recommended
   third-party tutorials outside of this documentation.
 - Finally, the :ref:`sec-class-ref` is the documentation of the Godot API,
   which is also available directly within the engine's script editor. It is
@@ -103,7 +103,7 @@ relatively intuitive:
   the generated files of the documentation are not meant to be modified. See
   :ref:`doc_class_reference_writing_guidelines` for details.
 
-In addition to this documentation you may also want to take a look at the
+In addition to this documentation, you may also want to take a look at the
 various `Godot demo projects <https://github.com/godotengine/godot-demo-projects>`_.
 
 Have fun reading and making games with Godot Engine!

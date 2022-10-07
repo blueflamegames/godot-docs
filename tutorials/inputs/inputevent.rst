@@ -1,7 +1,7 @@
 .. _doc_inputevent:
 
-InputEvent
-==========
+Using InputEvent
+================
 
 What is it?
 -----------
@@ -33,7 +33,7 @@ Here is a quick example, closing your game if the escape key is hit:
 
 However, it is cleaner and more flexible to use the provided :ref:`InputMap <class_InputMap>` feature,
 which allows you to define input actions and assign them different keys. This way,
-you can define multiple keys for the same action (e.g. they keyboard escape key and the start button on a gamepad).
+you can define multiple keys for the same action (e.g. the keyboard escape key and the start button on a gamepad).
 You can then more easily change this mapping in the project settings without updating your code,
 and even build a key mapping feature on top of it to allow your game to change the key mapping at runtime!
 
@@ -62,14 +62,9 @@ How does it work?
 Every input event is originated from the user/player (though it's
 possible to generate an InputEvent and feed them back to the engine,
 which is useful for gestures). The OS object for each platform will read
-events from the device, then feed them to MainLoop. As :ref:`SceneTree <class_SceneTree>`
-is the default MainLoop implementation, events are fed to it. Godot
-provides a function to get the current SceneTree object :
-**get_tree()**.
+events from the device, then feed them to the :ref:`Window <class_Window>`.
 
-But SceneTree does not know what to do with the event, so it will give
-it to the viewports, starting by the "root" :ref:`Viewport <class_Viewport>` (the first
-node of the scene tree). Viewport does quite a lot of stuff with the
+The window's :ref:`Viewport <class_Viewport>` does quite a lot of stuff with the
 received input, in order:
 
 .. image:: img/input_event_flow.png
@@ -95,8 +90,8 @@ received input, in order:
    If any function consumes the event, it can call :ref:`SceneTree.set_input_as_handled() <class_SceneTree_method_set_input_as_handled>`, and the
    event will not spread any more. The unhandled input callback is ideal for full-screen gameplay events, so they are not received when a GUI is active.
 4. If no one wanted the event so far, and a :ref:`Camera <class_Camera>` is assigned
-   to the Viewport, a ray to the physics world (in the ray direction from
-   the click) will be cast. If this ray hits an object, it will call the
+   to the Viewport with :ref:`Object Picking <class_viewport_property_physics_object_picking>` turned on, a ray to the physics world (in the ray direction from
+   the click) will be cast. (For the root viewport, this can also be enabled in :ref:`Project Settings <class_ProjectSettings_property_physics/common/enable_object_picking>`) If this ray hits an object, it will call the
    :ref:`CollisionObject._input_event() <class_CollisionObject_method__input_event>` function in the relevant
    physics object (bodies receive this callback by default, but areas do
    not. This can be configured through :ref:`Area <class_Area>` properties).
@@ -161,16 +156,20 @@ There are several specialized types of InputEvent, described in the table below:
 Actions
 -------
 
-An InputEvent may or may not represent a pre-defined action. Actions are
-useful because they abstract the input device when programming the game
-logic. This allows for:
+Actions are a grouping of zero or more InputEvents into a commonly
+understood title (for example, the default "ui_left" action grouping both joypad-left input and a keyboard's left arrow key). They are not required to represent an
+InputEvent but are useful because they abstract various inputs when
+programming the game logic.
+
+This allows for:
 
 -  The same code to work on different devices with different inputs (e.g.,
    keyboard on PC, Joypad on console).
 -  Input to be reconfigured at run-time.
+-  Actions to be triggered programmatically at run-time.
 
 Actions can be created from the Project Settings menu in the **Input Map**
-tab.
+tab and assigned input events.
 
 Any event has the methods :ref:`InputEvent.is_action() <class_InputEvent_method_is_action>`,
 :ref:`InputEvent.is_pressed() <class_InputEvent_method_is_pressed>` and :ref:`InputEvent <class_InputEvent>`.
@@ -184,8 +183,8 @@ The Input singleton has a method for this:
  .. code-tab:: gdscript GDScript
 
     var ev = InputEventAction.new()
-    # Set as move_left, pressed.
-    ev.action = "move_left"
+    # Set as ui_left, pressed.
+    ev.action = "ui_left"
     ev.pressed = true
     # Feedback.
     Input.parse_input_event(ev)
@@ -193,8 +192,8 @@ The Input singleton has a method for this:
  .. code-tab:: csharp
 
     var ev = new InputEventAction();
-    // Set as move_left, pressed.
-    ev.SetAction("move_left");
+    // Set as ui_left, pressed.
+    ev.SetAction("ui_left");
     ev.SetPressed(true);
     // Feedback.
     Input.ParseInputEvent(ev);

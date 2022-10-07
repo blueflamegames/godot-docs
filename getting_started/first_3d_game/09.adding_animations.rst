@@ -17,7 +17,7 @@ Using the animation editor
 The engine comes with tools to author animations in the editor. You can then use
 the code to play and control them at runtime.
 
-Open the player scene, select the player node, and add an animation player node.
+Open the player scene, select the player node, and add an *AnimationPlayer* node.
 
 The *Animation* dock appears in the bottom panel.
 
@@ -245,16 +245,10 @@ node structure, you can copy them to different scenes.
 For example, both the *Mob* and the *Player* scenes have a *Pivot* and a
 *Character* node, so we can reuse animations between them.
 
-We're going to duplicate the animation using a feature called "merge from
-scene".
-
-Open the *Mob* scene, right-click on the *Mob* node and select *Merge From
-Scene*.
-
-|image23|
-
-Double-click ``Player.tscn`` to open it and import the *AnimationPlayer*. That's
-it; all monsters will now play the float animation.
+Open the *Player* scene, select the animation player node and open the "float" animation.
+Next, click on **Animation > Copy**. Then open ``Mob.tscn`` and open its animation
+player. Click **Animation > Paste**. That's it; all monsters will now play the float
+animation.
 
 We can change the playback speed based on the creature's ``random_speed``. Open
 the *Mob*'s script and at the end of the ``initialize()`` function, add the
@@ -294,13 +288,13 @@ Here's the *Player* script.
    signal hit
 
    # How fast the player moves in meters per second.
-   export var speed = 14
+   @export var speed = 14
    # The downward acceleration when in the air, in meters per second per second.
-   export var fall_acceleration = 75
+   @export var fall_acceleration = 75
    # Vertical impulse applied to the character upon jumping in meters per second.
-   export var jump_impulse = 20
+   @export var jump_impulse = 20
    # Vertical impulse applied to the character upon bouncing over a mob in meters per second.
-   export var bounce_impulse = 16
+   @export var bounce_impulse = 16
 
    var velocity = Vector3.ZERO
 
@@ -359,7 +353,7 @@ Here's the *Player* script.
     {
         // Emitted when the player was hit by a mob.
         [Signal]
-        public delegate void Hit();
+        public delegate void HitEventHandler();
 
         // How fast the player moves in meters per second.
         [Export]
@@ -461,9 +455,9 @@ And the *Mob*'s script.
    signal squashed
 
    # Minimum speed of the mob in meters per second.
-   export var min_speed = 10
+   @export var min_speed = 10
    # Maximum speed of the mob in meters per second.
-   export var max_speed = 18
+   @export var max_speed = 18
 
    var velocity = Vector3.ZERO
 
@@ -473,8 +467,7 @@ And the *Mob*'s script.
 
 
    func initialize(start_position, player_position):
-       translation = start_position
-       look_at(player_position, Vector3.UP)
+       look_at_from_position(start_position, player_position, Vector3.UP)
        rotate_y(rand_range(-PI / 4, PI / 4))
 
        var random_speed = rand_range(min_speed, max_speed)
@@ -498,47 +491,46 @@ And the *Mob*'s script.
     {
         // Emitted when the played jumped on the mob.
         [Signal]
-        public delegate void Squashed();
-    
+        public delegate void SquashedEventHandler();
+
         // Minimum speed of the mob in meters per second
         [Export]
         public int MinSpeed = 10;
         // Maximum speed of the mob in meters per second
         [Export]
         public int MaxSpeed = 18;
-    
+
         private Vector3 _velocity = Vector3.Zero;
-    
+
         public override void _PhysicsProcess(float delta)
         {
             MoveAndSlide(_velocity);
         }
-    
+
         public void Initialize(Vector3 startPosition, Vector3 playerPosition)
         {
-            Translation = startPosition;
-            LookAt(playerPosition, Vector3.Up);
+            LookAtFromPosition(startPosition, playerPosition, Vector3.Up);
             RotateY((float)GD.RandRange(-Mathf.Pi / 4.0, Mathf.Pi / 4.0));
-    
+
             float randomSpeed = (float)GD.RandRange(MinSpeed, MaxSpeed);
             _velocity = Vector3.Forward * randomSpeed;
             _velocity = _velocity.Rotated(Vector3.Up, Rotation.y);
-    
+
             GetNode<AnimationPlayer>("AnimationPlayer").PlaybackSpeed = randomSpeed / MinSpeed;
         }
-    
+
         public void Squash()
         {
             EmitSignal(nameof(Squashed));
             QueueFree();
         }
-    
+
         public void OnVisibilityNotifierScreenExited()
         {
             QueueFree();
         }
     }
- 
+
 .. |image0| image:: img/squash-the-creeps-final.gif
 .. |image1| image:: img/09.adding_animations/01.animation_player_dock.png
 .. |image2| image:: img/09.adding_animations/02.new_animation.png
@@ -562,4 +554,3 @@ And the *Mob*'s script.
 .. |image20| image:: img/09.adding_animations/19.ease_in_second_translation_key.png
 .. |image21| image:: img/09.adding_animations/20.float_animation.gif
 .. |image22| image:: img/09.adding_animations/21.script_icon.png
-.. |image23| image:: img/09.adding_animations/22.merge_from_scene.png

@@ -2,6 +2,7 @@
 #
 # Godot Engine documentation build configuration file
 
+import sphinx
 import sphinx_rtd_theme
 import sys
 import os
@@ -61,9 +62,6 @@ ogp_site_name = "Godot Engine documentation"
 if not os.getenv("SPHINX_NO_GDSCRIPT"):
     extensions.append("gdscript")
 
-if not os.getenv("SPHINX_NO_SEARCH"):
-    extensions.append("sphinx_search.extension")
-
 if not os.getenv("SPHINX_NO_DESCRIPTIONS"):
     extensions.append("godot_descriptions")
 
@@ -79,7 +77,7 @@ master_doc = "index"
 # General information about the project
 project = "Godot Engine"
 copyright = (
-    "2014-2021, Juan Linietsky, Ariel Manzur and the Godot community (CC-BY 3.0)"
+    "2014-2022, Juan Linietsky, Ariel Manzur and the Godot community (CC BY 3.0)"
 )
 author = "Juan Linietsky, Ariel Manzur and the Godot community"
 
@@ -187,13 +185,20 @@ html_static_path = ["_static"]
 html_extra_path = ["robots.txt"]
 
 # These paths are either relative to html_static_path
-# or fully qualified paths (eg. https://...)
+# or fully qualified paths (e.g. https://...)
 html_css_files = [
+    'css/algolia.css',
+    'https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css',
     "css/custom.css",
 ]
 
+if not on_rtd:
+    html_css_files.append("css/dev.css")
+
 html_js_files = [
     "js/custom.js",
+    ('https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js', {'defer': 'defer'}),
+    ('js/algolia.js', {'defer': 'defer'})
 ]
 
 # Output file base name for HTML help builder
@@ -245,10 +250,10 @@ gettext_compact = False
 # https://github.com/sphinx-doc/sphinx/issues/7768 to see what would be relevant for us.
 figure_language_filename = "{root}.{language}{ext}"
 
-import sphinx
 cwd = os.getcwd()
 
 sphinx_original_get_image_filename_for_language = sphinx.util.i18n.get_image_filename_for_language
+
 
 def godot_get_image_filename_for_language(filename, env):
     """
@@ -263,6 +268,19 @@ def godot_get_image_filename_for_language(filename, env):
     return path
 
 sphinx.util.i18n.get_image_filename_for_language = godot_get_image_filename_for_language
+
+# Similar story for the localized class reference, it's out of tree and there doesn't
+# seem to be an easy way for us to tweak the toctree to take this into account.
+# So we're deleting the existing class reference and adding a symlink instead...
+if is_i18n and os.path.exists("../classes/" + language):
+    import shutil
+
+    if os.path.islink("classes"):  # Previously made symlink.
+        os.unlink("classes")
+    else:
+        shutil.rmtree("classes")
+
+    os.symlink("../classes/" + language, "classes")
 
 # Couldn't find a way to retrieve variables nor do advanced string
 # concat from reST, so had to hardcode this in the "epilog" added to

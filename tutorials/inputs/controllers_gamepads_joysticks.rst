@@ -10,8 +10,10 @@ Controllers are supported on Windows, macOS, Linux, Android, iOS, and HTML5.
 
 Note that more specialized devices such as steering wheels, rudder pedals and
 `HOTAS <https://en.wikipedia.org/wiki/HOTAS>`__ are less tested and may not
-always work as expected. If you have access to one of those devices, don't hesitate to
-`report bugs on GitHub <https://github.com/godotengine/godot/blob/master/CONTRIBUTING.md#reporting-bugs>`__.
+always work as expected. Overriding force feedback for those devices is also not
+implemented yet. If you have access to one of those devices, don't hesitate to
+`report bugs on GitHub
+<https://github.com/godotengine/godot/blob/master/CONTRIBUTING.md#reporting-bugs>`__.
 
 In this guide, you will learn:
 
@@ -39,7 +41,7 @@ Input actions are explained in detail on the :ref:`doc_inputevent` page.
 Which Input singleton method should I use?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In Godot 4.0, there are 3 ways to get input in an analog-aware way:
+There are 3 ways to get input in an analog-aware way:
 
 - When you have two axes (such as joystick or WASD movement) and want both
   axes to behave as a single input, use ``Input.get_vector()``:
@@ -130,9 +132,9 @@ use ``Input.is_action_pressed()``:
     held,``Input.is_action_just_pressed()`` will only return ``true`` for one
     frame after the button has been pressed.
 
-In Godot versions before 4.0, such as 3.2, ``Input.get_vector()`` and
+In Godot versions before 3.4, such as 3.3, ``Input.get_vector()`` and
 ``Input.get_axis()`` aren't available. Only ``Input.get_action_strength()``
-and ``Input.is_action_pressed()`` are available in Godot 3.2.
+and ``Input.is_action_pressed()`` are available in Godot 3.3.
 
 Differences between keyboard/mouse and controller input
 -------------------------------------------------------
@@ -201,6 +203,15 @@ your controller is recognized.
 My controller has incorrectly mapped buttons or axes.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+First, if your controller provides some kind of firmware update utility,
+make sure to run it to get the latest fixes from the manufacturer. For instance,
+Xbox One and Xbox Series controllers can have their firmware updated using the
+`Xbox Accessories app <https://www.microsoft.com/en-us/p/xbox-accessories/9nblggh30xj3>`__.
+(This application only runs on Windows, so you have to use a Windows machine
+or a Windows virtual machine with USB support to update the controller's firmware.)
+After updating the controller's firmware, unpair the controller and pair it again
+with your PC if you are using the controller in wireless mode.
+
 If buttons are incorrectly mapped, this may be due to an erroneous mapping from
 the `SDL game controller database <https://github.com/gabomdq/SDL_GameControllerDB>`__.
 You can contribute an updated mapping to be included in the next Godot version
@@ -235,16 +246,10 @@ as early as possible in a script's ``_ready()`` function.
 My controller works on a given platform, but not on another platform.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-macOS
-~~~~~
-
-Controllers are currently only supported on x86-based Macs. This means
-controllers won't work on Macs featuring ARM processors such as the Apple M1.
-
 Linux
 ~~~~~
 
-Prior to Godot 3.2.4, official Godot binaries were compiled with udev support
+Prior to Godot 3.3, official Godot binaries were compiled with udev support
 but self-compiled binaries were compiled *without* udev support unless
 ``udev=yes`` was passed on the SCons command line. This made controller
 hotplugging support unavailable in self-compiled binaries.
@@ -259,4 +264,4 @@ can't get their controller to work.
 
 Also, note that
 `controller support was significantly improved <https://github.com/godotengine/godot/pull/45078>`__
-in Godot 3.2.4 and later.
+in Godot 3.3 and later.

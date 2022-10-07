@@ -42,8 +42,8 @@ balancing operation speed and memory consumption as well as balancing data
 access and integrity.
 
 1. **We can delete the existing scene.**
-   :ref:`SceneTree.change_scene() <class_SceneTree_method_change_scene>` and
-   :ref:`SceneTree.change_scene_to() <class_SceneTree_method_change_scene_to>`
+   :ref:`SceneTree.change_scene_to_file() <class_SceneTree_method_change_scene_to_file>` and
+   :ref:`SceneTree.change_scene_to_packed() <class_SceneTree_method_change_scene_to_packed>`
    will delete the current scene immediately. Developers can also delete the
    main scene though. Assuming the root node's name is "Main", one could do
    ``get_node("/root/Main").free()`` to delete the whole scene.
@@ -130,7 +130,7 @@ a scene's data between scene changes (adding the scene to the root node).
 
         GetTree().GetRoot().AddChild(scene);
 
-Perhaps instead they wish to display multiple scenes at the same time using a
+Perhaps instead they wish to display multiple scenes at the same time using
 :ref:`ViewportContainers <class_ViewportContainer>`. This is optimal in
 cases where the intent is to render different content in different parts of the
 screen. Minimaps and split-screen multiplayer are good examples.

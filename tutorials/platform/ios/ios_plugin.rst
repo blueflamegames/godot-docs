@@ -39,7 +39,7 @@ An iOS plugin can have the same functionality as a Godot module but provides mor
 
 Here are the steps to get a plugin's development started. We recommend using `Xcode <https://developer.apple.com/develop/>`_ as your development environment.
 
-.. seealso:: The `Godot iOS Plugins <https://github.com/godotengine/godot-ios-plugins>`_ Godot iOS plugins.
+.. seealso:: The `Godot iOS Plugins <https://github.com/godotengine/godot-ios-plugins>`_.
 
     The `Godot iOS plugin template <https://github.com/naithar/godot_ios_plugin>`_ gives you all the boilerplate you need to get your iOS plugin started.
 
@@ -56,13 +56,21 @@ To build an iOS plugin:
 
     - You should use the same header files for iOS plugins and for the iOS export template.
 
-3. In the ``Build Settings`` tab, specify the compilation flags for your static library in ``OTHER_CFLAGS``. The most important ones are ``-fcxx-modules``, ``-fmodules``, and ``-DDEBUG`` if you need debug support. Other flags should be the same you use to compile Godot. For instance, ``-DPTRCALL_ENABLED -DDEBUG_ENABLED, -DDEBUG_MEMORY_ALLOC -DDISABLE_FORCED_INLINE -DTYPED_METHOD_BIND``.
+3. In the ``Build Settings`` tab, specify the compilation flags for your static library in ``OTHER_CFLAGS``. The most important ones are ``-fcxx-modules``, ``-fmodules``, and ``-DDEBUG`` if you need debug support. Other flags should be the same you use to compile Godot. For instance:
+
+::
+
+    -DPTRCALL_ENABLED -DDEBUG_ENABLED -DDEBUG_MEMORY_ALLOC -DDISABLE_FORCED_INLINE -DTYPED_METHOD_BIND
 
 4. Add the required logic for your plugin and build your library to generate a ``.a`` file. You will probably need to build both ``debug`` and ``release`` target ``.a`` files. Depending on your needs, pick either or both. If you need both debug and release ``.a`` files, their name should match following pattern: ``[PluginName].[TargetType].a``. You can also build the static library with your SCons configuration.
 
-5. The iOS plugin system also supports ``.xcframework`` files. To generate one, you can use a command such as: ``xcodebuild -create-xcframework -library [DeviceLibrary].a -library [SimulatorLibrary].a -output [PluginName].xcframework``.
+5. The iOS plugin system also supports ``.xcframework`` files. To generate one, you can use a command such as:
 
-6.  Create a Godot iOS Plugin configuration file to help the system detect and load your plugin:
+::
+
+    xcodebuild -create-xcframework -library [DeviceLibrary].a -library [SimulatorLibrary].a -output [PluginName].xcframework
+
+6. Create a Godot iOS Plugin configuration file to help the system detect and load your plugin:
 
     -   The configuration file extension must be ``gdip`` (e.g.: ``MyPlugin.gdip``).
 
@@ -87,7 +95,16 @@ To build an iOS plugin:
             linker_flags=["-ObjC"]
 
             [plist]
-            PlistKey="Some Info.plist key you might need"
+            PlistKeyWithDefaultType="Some Info.plist key you might need"
+            StringPlistKey:string="String value"
+            IntegerPlistKey:integer=42
+            BooleanPlistKey:boolean=true
+            RawPlistKey:raw="
+            <array>
+                <string>UIInterfaceOrientationPortrait</string>
+            </array>
+            "
+            StringPlistKeyToInput:string_input="Type something"
 
         The ``config`` section and fields are required and defined as follow:
 
@@ -116,4 +133,10 @@ To build an iOS plugin:
 
                 -   **linker_flags**: contains a list of linker flags to add to the Xcode project when exporting the plugin.
 
-            -   **plist**: should have keys and values that should be present in ``Info.plist`` file following pattern: ``KeyName="key value"``
+            -   **plist**: should have keys and values that should be present in ``Info.plist`` file.
+
+                -   Each line should follow pattern: ``KeyName:KeyType=KeyValue``
+                -   Supported values for ``KeyType`` are ``string``, ``integer``, ``boolean``, ``raw``, ``string_input``
+                -   If no type is used (e.g.: ``KeyName="KeyValue"``) ``string`` type will be used.
+                -   If ``raw`` type is used value for corresponding key will be stored in ``Info.plist`` as is.
+                -   If ``string_input`` type is used you will be able to modify value in Export window.

@@ -254,7 +254,7 @@ Choosing a node tree structure
 So, a developer starts work on a game only to stop at the vast possibilities
 before them. They might know what they want to do, what systems they want to
 have, but *where* to put them all? Well, how one goes about making their game
-is always up to them. One can construct node trees in a myriad of ways.
+is always up to them. One can construct node trees in countless ways.
 But, for those who are unsure, this helpful guide can give them a sample of
 a decent structure to start with.
 
@@ -294,7 +294,7 @@ If one has a system that...
 
   For smaller games, a simpler alternative with less control would be to have
   a "Game" singleton that simply calls the
-  :ref:`SceneTree.change_scene() <class_SceneTree_method_change_scene>` method
+  :ref:`SceneTree.change_scene_to_file() <class_SceneTree_method_change_scene_to_file>` method
   to swap out the main scene's content. This structure more or less keeps
   the "World" as the main game node.
 
@@ -306,7 +306,7 @@ If one has a system that...
 If one has systems that modify other systems' data, one should define those as
 their own scripts or scenes rather than autoloads. For more information on the
 reasons, please see the
-:ref:`'Autoloads vs. Internal Nodes' <doc_autoloads_versus_internal_nodes>`
+:ref:`Autoloads versus regular nodes <doc_autoloads_versus_internal_nodes>`
 documentation.
 
 Each subsystem within one's game should have its own section within the

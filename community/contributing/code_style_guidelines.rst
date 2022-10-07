@@ -48,13 +48,18 @@ setup clang-format locally to check and automatically fix all your commits.
              ``/* clang-format off */`` and ``/* clang-format on */`` to tell
              clang-format to ignore a chunk of code.
 
+.. seealso::
+
+    These guidelines only cover code formatting. See :ref:`doc_cpp_usage_guidelines`
+    for a list of language features that are permitted in pull requests.
+
 Using clang-format locally
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 First of all, you will need to install clang-format. As of now, you need to use
-**clang-format 11** to be compatible with Godot's format. Later versions might
-be suitable, but previous versions had bugs that will cause formatting changes
-to the current code base.
+**clang-format 13** to be compatible with Godot's format. Later versions might
+be suitable, but previous versions may not support all used options, or format
+some things differently, leading to style issues in pull requests.
 
 Installation
 ^^^^^^^^^^^^
@@ -121,6 +126,8 @@ Here is a non-exhaustive list of beautifier plugins for some IDEs:
   `ClangFormat <https://www.jetbrains.com/help/clion/clangformat-as-alternative-formatter.html#clion-support>`__
 
 (Pull requests welcome to extend this list with tested plugins.)
+
+.. _doc_code_style_guidelines_header_includes:
 
 Header includes
 ~~~~~~~~~~~~~~~
@@ -266,7 +273,7 @@ Here's how to install black:
 
 ::
 
-    pip install black --user
+    pip3 install black --user
 
 
 You then have different possibilities to apply black to your changes:
@@ -338,7 +345,7 @@ Don't repeat what the code says in a comment. Explain the *why* rather than *how
 You can use Javadoc-style comments above function or macro definitions. It's
 recommended to use Javadoc-style comments *only* for methods which are not
 exposed to scripting. This is because exposed methods should be documented in
-the :ref:`class reference XML <doc_updating_the_class_reference_with_git>`
+the :ref:`class reference XML <doc_updating_the_class_reference>`
 instead.
 
 **Example:**

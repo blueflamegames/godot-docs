@@ -1,7 +1,7 @@
 .. _doc_rigid_body:
 
-RigidBody
-=========
+Using RigidBody
+===============
 
 What is a rigid body?
 ---------------------
@@ -38,21 +38,21 @@ Here is a custom ``look_at()`` method that will work reliably with rigid bodies:
 
     func look_follow(state, current_transform, target_position):
         var up_dir = Vector3(0, 1, 0)
-        var cur_dir = current_transform.basis.xform(Vector3(0, 0, 1))
+        var cur_dir = current_transform.basis * Vector3(0, 0, 1)
         var target_dir = (target_position - current_transform.origin).normalized()
         var rotation_angle = acos(cur_dir.x) - acos(target_dir.x)
 
-        state.set_angular_velocity(up_dir * (rotation_angle / state.get_step()))
+        state.angular_velocity = up_dir * (rotation_angle / state.step)
 
     func _integrate_forces(state):
-        var target_position = $my_target_spatial_node.get_global_transform().origin
-        look_follow(state, get_global_transform(), target_position)
+        var target_position = $my_target_spatial_node.global_transform.origin
+        look_follow(state, global_transform, target_position)
 
  .. code-tab:: csharp
 
     class Body : RigidBody
     {
-        private void LookFollow(PhysicsDirectBodyState state, Transform currentTransform, Vector3 targetPosition)
+        private void LookFollow(PhysicsDirectBodyState state, Transform3D currentTransform, Vector3 targetPosition)
         {
             var upDir = new Vector3(0, 1, 0);
             var curDir = currentTransform.basis.Xform(new Vector3(0, 0, 1));
@@ -70,6 +70,6 @@ Here is a custom ``look_at()`` method that will work reliably with rigid bodies:
     }
 
 
-This method uses the rigid body's ``set_angular_velocity()`` method to rotate the body. It first calculates the difference between the current and desired angle and then adds the velocity needed to rotate by that amount in one frame's time.
+This method uses the rigid body's ``angular_velocity`` property to rotate the body. It first calculates the difference between the current and desired angle and then adds the velocity needed to rotate by that amount in one frame's time.
 
 .. note:: This script will not work with rigid bodies in *character mode* because then, the body's rotation is locked. In that case, you would have to rotate the attached mesh node instead using the standard Spatial methods.
