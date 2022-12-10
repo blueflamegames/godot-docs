@@ -11,11 +11,11 @@ that moves in eight directions.
 .. player_movement.gif
 
 Create a new scene by going to the Scene menu in the top-left and clicking *New
-Scene*. Create a *KinematicBody* node as the root and name it *Player*.
+Scene*. Create a *CharacterBody3D* node as the root and name it *Player*.
 
 |image0|
 
-Kinematic bodies are complementary to the area and rigid bodies used in the 2D
+Character bodies are complementary to the area and rigid bodies used in the 2D
 game tutorial. Like rigid bodies, they can move and collide with the
 environment, but instead of being controlled by the physics engine, you dictate
 their movement. You will see how we use the node's unique features when we code
@@ -29,7 +29,7 @@ the jump and squash mechanics.
 For now, we're going to create a basic rig for our character's 3D model. This
 will allow us to rotate the model later via code while it plays an animation.
 
-Add a *Spatial* node as a child of *Player* and name it *Pivot*. Then, in the
+Add a *Node3D* node as a child of *Player* and name it *Pivot*. Then, in the
 FileSystem dock, expand the ``art/`` folder by double-clicking it and drag and
 drop ``player.glb`` onto the *Pivot* node.
 

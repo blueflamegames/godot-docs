@@ -56,11 +56,9 @@ Serializing
 The next step is to serialize the data. This makes it much easier to
 read from and store to disk. In this case, we're assuming each member of
 group Persist is an instanced node and thus has a path. GDScript
-has helper functions for this, such as :ref:`to_json()
-<class_@GDScript_method_to_json>` and :ref:`parse_json()
-<class_@GDScript_method_parse_json>`, so we will use a dictionary. Our node needs to
-contain a save function that returns this data. The save function will look
-like this:
+has helper class :ref:`JSON<class_json>` to convert between dictionary and string,
+Our node needs to contain a save function that returns this data.
+The save function will look like this:
 
 .. tabs::
  .. code-tab:: gdscript GDScript
@@ -125,8 +123,7 @@ Saving and reading data
 
 As covered in the :ref:`doc_filesystem` tutorial, we'll need to open a file
 so we can write to it or read from it. Now that we have a way to
-call our groups and get their relevant data, let's use :ref:`to_json()
-<class_@GDScript_method_to_json>` to
+call our groups and get their relevant data, let's use the class :ref:`JSON<class_json>` to
 convert it into an easily stored string and store them in a file. Doing
 it this way ensures that each line is its own object, so we have an easy
 way to pull the data out of the file as well.
@@ -156,8 +153,11 @@ way to pull the data out of the file as well.
             # Call the node's save function.
             var node_data = node.call("save")
 
+            # JSON provides a static method to serialized JSON string
+            var json_string = JSON.stringify(node_data)
+
             # Store the save dictionary as a new line in the save file.
-            save_game.store_line(to_json(node_data))
+            save_game.store_line(json_string)
         save_game.close()
 
  .. code-tab:: csharp
@@ -200,7 +200,8 @@ way to pull the data out of the file as well.
 
 
 Game saved! Now, to load, we'll read each
-line, use ``parse_json()`` to read it back to a dict, and then iterate over
+line. Use the :ref:`parse<class_JSON_method_parse>` method to read the
+JSON string back to a dictionary, and then iterate over
 the dict to read our values. But we'll need to first create the object
 and we can use the filename and parent values to achieve that. Here is our
 load function:
@@ -227,11 +228,20 @@ load function:
         # the object it represents.
         save_game.open("user://savegame.save", File.READ)
         while save_game.get_position() < save_game.get_len():
-            # Get the saved dictionary from the next line in the save file
-            var node_data = parse_json(save_game.get_line())
+            # Creates the helper class to interact with JSON
+            var json = JSON.new()
+
+            # Check if there is any error while parsing the JSON string, skip in case of failure
+            var parse_result = json.parse(json_string)
+            if not parse_result == OK:
+                print("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())
+                continue
+
+            # Get the data from the JSON object
+            var node_data = json.get_data()
 
             # Firstly, we need to create the object and add it to the tree and set its position.
-            var new_object = load(node_data["filename"]).instance()
+            var new_object = load(node_data["filename"]).instantiate()
             get_node(node_data["parent"]).add_child(new_object)
             new_object.position = Vector2(node_data["pos_x"], node_data["pos_y"])
 
@@ -272,7 +282,7 @@ load function:
 
             // Firstly, we need to create the object and add it to the tree and set its position.
             var newObjectScene = (PackedScene)ResourceLoader.Load(nodeData["Filename"].ToString());
-            var newObject = (Node)newObjectScene.Instance();
+            var newObject = (Node)newObjectScene.Instantiate();
             GetNode(nodeData["Parent"].ToString()).AddChild(newObject);
             newObject.Set("Position", new Vector2((float)nodeData["PosX"], (float)nodeData["PosY"]));
 
@@ -331,7 +341,7 @@ Here are some important gotchas to know about when using JSON.
   JSON only offers a limited set of data types. If you have data types
   that JSON doesn't have, you will need to translate your data to and
   from types that JSON can handle. For example, some important types that JSON
-  can't parse are: ``Vector2``, ``Vector3``, ``Color``, ``Rect2``, and ``Quat``.
+  can't parse are: ``Vector2``, ``Vector3``, ``Color``, ``Rect2``, and ``Quaternion``.
 * **Custom logic needed for encoding/decoding:**
   If you have any custom classes that you want to store with JSON, you will
   need to write your own logic for encoding and decoding those classes.
@@ -341,7 +351,7 @@ Binary serialization
 
 :ref:`Binary serialization<doc_binary_serialization_api>` is an alternative
 approach for storing game state, and you can use it with the functions
-``get_var`` and ``store_var`` of :ref:`class_File`.
+``get_var`` and ``store_var`` of :ref:`class_FileAccess`.
 
 * Binary serialization should produce smaller files than JSON.
 * Binary serialization can handle most common data types.

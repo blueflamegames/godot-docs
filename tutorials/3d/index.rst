@@ -10,10 +10,12 @@
    3d_rendering_limitations
    standard_material_3d
    lights_and_shadows
+   physical_light_and_camera_units
    reflection_probes
    gi_probes
    baked_lightmaps
    environment_and_post_processing
+   3d_antialiasing
    volumetric_fog
    high_dynamic_range
    using_gridmaps

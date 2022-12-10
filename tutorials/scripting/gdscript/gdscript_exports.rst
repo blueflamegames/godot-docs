@@ -187,15 +187,28 @@ Color given as red-green-blue value (alpha will always be 1).
 Nodes
 -----
 
-Nodes can't be directly exported. Instead you need to export
-a node path, then use that node path with `get_node()`
+Since Godot 4.0, nodes can be directly exported as properties in a script
+without having to use NodePaths:
+
+::
+
+    # Allows any node.
+    @export var node: Node
+
+    # Allows any node that inherits from BaseButton.
+    # Custom classes declared with `class_name` can also be used.
+    @export var some_button: BaseButton
+
+Exporting NodePaths like in Godot 3.x is still possible, in case you need it:
 
 ::
 
     @export var node_path: NodePath
     var node = get_node(node_path)
 
-If you want to limit the types of nodes, you can use the @export_node_path annotation.
+If you want to limit the types of nodes for NodePaths, you can use the
+:ref:`@export_node_path<class_@GDScript_annotation_@export_node_path>`
+annotation:
 
 ::
 
@@ -305,7 +318,7 @@ Setting exported variables from a tool script
 When changing an exported variable's value from a script in
 :ref:`doc_gdscript_tool_mode`, the value in the inspector won't be updated
 automatically. To update it, call
-:ref:`property_list_changed_notify() <class_Object_method_property_list_changed_notify>`
+:ref:`notify_property_list_changed() <class_Object_method_notify_property_list_changed>`
 after setting the exported variable's value.
 
 Advanced exports

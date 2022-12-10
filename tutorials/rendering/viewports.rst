@@ -89,7 +89,7 @@ Scale & stretching
 ------------------
 
 :ref:`Viewports <class_Viewport>` have a "size" property, which represents the size of the :ref:`Viewport <class_Viewport>`
-in pixels. For :ref:`Viewports <class_Viewport>` which are children of :ref:`ViewportContainers <class_ViewportContainer>`,
+in pixels. For :ref:`Viewports <class_Viewport>` which are children of :ref:`SubViewportContainers <class_SubViewportContainer>`,
 these values are overridden, but for all others, this sets their resolution.
 
 It is also possible to scale the 2D content and make the :ref:`Viewport <class_Viewport>` resolution
@@ -108,7 +108,7 @@ Worlds
 
 For 3D, a :ref:`Viewport <class_Viewport>` will contain a :ref:`World3D <class_World3D>`. This
 is basically the universe that links physics and rendering together.
-Spatial-based nodes will register using the :ref:`World3D <class_World3D>` of the closest :ref:`Viewport <class_Viewport>`.
+Node3D-based nodes will register using the :ref:`World3D <class_World3D>` of the closest :ref:`Viewport <class_Viewport>`.
 By default, newly created :ref:`Viewports <class_Viewport>` do not contain a :ref:`World3D <class_World3D>` but
 use the same as their parent :ref:`Viewport <class_Viewport>` (the root :ref:`Viewport <class_Viewport>` always contains a
 :ref:`World3D <class_World3D>`, which is the one objects are rendered to by default). A :ref:`World3D <class_World3D>` can
@@ -162,13 +162,13 @@ it using (for example):
 Viewport Container
 ------------------
 
-If the :ref:`Viewport <class_Viewport>` is a child of a :ref:`ViewportContainer <class_ViewportContainer>`, it will become active and display anything it has inside. The layout looks like this:
+If the :ref:`Viewport <class_Viewport>` is a child of a :ref:`SubViewportContainer <class_SubViewportContainer>`, it will become active and display anything it has inside. The layout looks like this:
 
 .. image:: img/container.png
 
-The :ref:`Viewport <class_Viewport>` will cover the area of its parent :ref:`ViewportContainer <class_ViewportContainer>` completely
-if :ref:`Stretch<class_ViewportContainer_property_stretch>` is set to ``true`` in :ref:`ViewportContainer <class_ViewportContainer>`.
-Note: The size of the :ref:`ViewportContainer <class_ViewportContainer>` cannot be smaller than the size of the :ref:`Viewport <class_Viewport>`.
+The :ref:`Viewport <class_Viewport>` will cover the area of its parent :ref:`SubViewportContainer <class_SubViewportContainer>` completely
+if :ref:`Stretch<class_SubViewportContainer_property_stretch>` is set to ``true`` in :ref:`SubViewportContainer <class_SubViewportContainer>`.
+Note: The size of the :ref:`SubViewportContainer <class_SubViewportContainer>` cannot be smaller than the size of the :ref:`Viewport <class_Viewport>`.
 
 Rendering
 ---------
@@ -237,7 +237,7 @@ and then selecting the :ref:`Viewport <class_Viewport>` you want to use.
 .. image:: img/texturepath.png
 
 Every frame, the :ref:`Viewport <class_Viewport>`'s texture is cleared away with the default clear color (or a transparent
-color if :ref:`Transparent Bg<class_Viewport_property_transparent_bg>` is set to ``true``). This can be changed by setting :ref:`Clear Mode<class_Viewport_property_render_target_clear_mode>` to Never or Next Frame.
+color if :ref:`Transparent Bg<class_Viewport_property_transparent_bg>` is set to ``true``). This can be changed by setting ``Clear Mode`` to Never or Next Frame.
 As the name implies, Never means the texture will never be cleared, while next frame will
 clear the texture on the next frame and then set itself to Never.
 

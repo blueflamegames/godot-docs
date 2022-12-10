@@ -14,7 +14,7 @@ do this in 2D and 3D.
 Godot stores all the low level game information in servers, while the
 scene is only a frontend. As such, ray casting is generally a
 lower-level task. For simple raycasts, nodes like
-:ref:`RayCast <class_RayCast>` and :ref:`RayCast2D <class_RayCast2D>`
+:ref:`RayCast3D <class_RayCast3D>` and :ref:`RayCast2D <class_RayCast2D>`
 will work, as they return every frame what the result of a raycast
 is.
 
@@ -28,11 +28,11 @@ In the physics world, Godot stores all the low level collision and
 physics information in a *space*. The current 2d space (for 2D Physics)
 can be obtained by accessing
 :ref:`CanvasItem.get_world_2d().space <class_CanvasItem_method_get_world_2d>`.
-For 3D, it's :ref:`Spatial.get_world().space <class_Spatial_method_get_world>`.
+For 3D, it's :ref:`Node3D.get_world_3d().space <class_Node3D_method_get_world_3d>`.
 
 The resulting space :ref:`RID <class_RID>` can be used in
-:ref:`PhysicsServer <class_PhysicsServer>` and
-:ref:`Physics2DServer <class_Physics2DServer>` respectively for 3D and 2D.
+:ref:`PhysicsServer3D <class_PhysicsServer3D>` and
+:ref:`PhysicsServer2D <class_PhysicsServer2D>` respectively for 3D and 2D.
 
 Accessing space
 ---------------
@@ -45,8 +45,8 @@ callback. Accessing it from outside this function may result in an error
 due to space being *locked*.
 
 To perform queries into physics space, the
-:ref:`Physics2DDirectSpaceState <class_Physics2DDirectSpaceState>`
-and :ref:`PhysicsDirectSpaceState <class_PhysicsDirectSpaceState>`
+:ref:`PhysicsDirectSpaceState2D <class_PhysicsDirectSpaceState2D>`
+and :ref:`PhysicsDirectSpaceState3D <class_PhysicsDirectSpaceState3D>`
 must be used.
 
 Use the following code in 2D:
@@ -100,7 +100,7 @@ Raycast query
 -------------
 
 For performing a 2D raycast query, the method
-:ref:`Physics2DDirectSpaceState.intersect_ray() <class_Physics2DDirectSpaceState_method_intersect_ray>`
+:ref:`PhysicsDirectSpaceState2D.intersect_ray() <class_PhysicsDirectSpaceState2D_method_intersect_ray>`
 may be used. For example:
 
 .. tabs::
@@ -163,13 +163,13 @@ as shown in the following image:
 
 To avoid self-intersection, the ``intersect_ray()`` function can take an
 optional third parameter which is an array of exceptions. This is an
-example of how to use it from a KinematicBody2D or any other
+example of how to use it from a CharacterBody2D or any other
 collision object node:
 
 .. tabs::
  .. code-tab:: gdscript GDScript
 
-    extends KinematicBody2D
+    extends CharacterBody2D
 
     func _physics_process(delta):
         var space_state = get_world_2d().direct_space_state
@@ -177,7 +177,7 @@ collision object node:
 
  .. code-tab:: csharp
 
-    class Body : KinematicBody2D
+    class Body : CharacterBody2D
     {
         public override void _PhysicsProcess(float delta)
         {
@@ -202,7 +202,7 @@ member variable:
 .. tabs::
  .. code-tab:: gdscript GDScript
 
-    extends KinematicBody2D
+    extends CharacterBody2D
 
     func _physics_process(delta):
         var space_state = get_world().direct_space_state
@@ -211,7 +211,7 @@ member variable:
 
  .. code-tab:: csharp
 
-    class Body : KinematicBody2D
+    class Body : CharacterBody2D
     {
         public override void _PhysicsProcess(float delta)
         {
@@ -228,12 +228,12 @@ See :ref:`doc_physics_introduction_collision_layer_code_example` for details on 
 
 Casting a ray from screen to 3D physics space is useful for object
 picking. There is not much need to do this because
-:ref:`CollisionObject <class_CollisionObject>`
+:ref:`CollisionObject3D <class_CollisionObject3D>`
 has an "input_event" signal that will let you know when it was clicked,
 but in case there is any desire to do it manually, here's how.
 
-To cast a ray from the screen, you need a :ref:`Camera <class_Camera>`
-node. A ``Camera`` can be in two projection modes: perspective and
+To cast a ray from the screen, you need a :ref:`Camera3D <class_Camera3D>`
+node. A ``Camera3D`` can be in two projection modes: perspective and
 orthogonal. Because of this, both the ray origin and direction must be
 obtained. This is because ``origin`` changes in orthogonal mode, while
 ``normal`` changes in perspective mode:
@@ -249,9 +249,9 @@ To obtain it using a camera, the following code can be used:
 
     func _input(event):
         if event is InputEventMouseButton and event.pressed and event.button_index == 1:
-              var camera = $Camera
-              var from = camera.project_ray_origin(event.position)
-              var to = from + camera.project_ray_normal(event.position) * RAY_LENGTH
+              var camera3d = $Camera3D
+              var from = camera3d.project_ray_origin(event.position)
+              var to = from + camera3d.project_ray_normal(event.position) * RAY_LENGTH
 
  .. code-tab:: csharp
 
@@ -261,9 +261,9 @@ To obtain it using a camera, the following code can be used:
     {
         if (@event is InputEventMouseButton eventMouseButton && eventMouseButton.Pressed && eventMouseButton.ButtonIndex == 1)
         {
-            var camera = GetNode<Camera>("Camera");
-            var from = camera.ProjectRayOrigin(eventMouseButton.Position);
-            var to = from + camera.ProjectRayNormal(eventMouseButton.Position) * RayLength;
+            var camera3d = GetNode<Camera3D>("Camera3D");
+            var from = camera3d.ProjectRayOrigin(eventMouseButton.Position);
+            var to = from + camera3d.ProjectRayNormal(eventMouseButton.Position) * RayLength;
         }
     }
 

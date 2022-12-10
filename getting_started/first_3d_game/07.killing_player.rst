@@ -52,7 +52,7 @@ one to the *Player* node. In the *Node* tab, double-click the
 
 |image4|
 
-The *MobDetector* will emit ``body_entered`` when a *KinematicBody* or a
+The *MobDetector* will emit ``body_entered`` when a *CharacterBody3D* or a
 *RigidBody* node enters it. As it only masks the "enemies" physics
 layers, it will only detect the *Mob* nodes.
 
@@ -166,7 +166,7 @@ Starting with ``Main.gd``.
 
    func _on_MobTimer_timeout():
        # Create a new instance of the Mob scene.
-       var mob = mob_scene.instance()
+       var mob = mob_scene.instantiate()
 
        # Choose a random location on the SpawnPath.
        var mob_spawn_location = get_node("SpawnPath/SpawnLocation")
@@ -201,7 +201,7 @@ Starting with ``Main.gd``.
         public void OnMobTimerTimeout()
         {
             // Create a new instance of the Mob scene.
-            var mob = (Mob)MobScene.Instance();
+            var mob = (Mob)MobScene.Instantiate();
 
             // Choose a random location on the SpawnPath.
             // We store the reference to the SpawnLocation node.
@@ -228,7 +228,7 @@ Next is ``Mob.gd``.
 .. tabs::
  .. code-tab:: gdscript GDScript
 
-   extends KinematicBody
+   extends CharacterBody3D
 
    # Emitted when the player jumped on the mob.
    signal squashed
@@ -264,7 +264,7 @@ Next is ``Mob.gd``.
 
  .. code-tab:: csharp
 
-    public class Mob : KinematicBody
+    public class Mob : CharacterBody3D
     {
         // Emitted when the played jumped on the mob.
         [Signal]
@@ -311,7 +311,7 @@ Finally, the longest script, ``Player.gd``.
 .. tabs::
  .. code-tab:: gdscript GDScript
 
-   extends KinematicBody
+   extends CharacterBody3D
 
    # Emitted when a mob hit the player.
    signal hit
@@ -373,7 +373,7 @@ Finally, the longest script, ``Player.gd``.
 
  .. code-tab:: csharp
 
-    public class Player : KinematicBody
+    public class Player : CharacterBody3D
     {
         // Emitted when the player was hit by a mob.
         [Signal]
@@ -418,7 +418,7 @@ Finally, the longest script, ``Player.gd``.
             if (direction != Vector3.Zero)
             {
                 direction = direction.Normalized();
-                GetNode<Spatial>("Pivot").LookAt(Translation + direction, Vector3.Up);
+                GetNode<Node3D>("Pivot").LookAt(Translation + direction, Vector3.Up);
             }
 
             _velocity.x = direction.x * Speed;
@@ -435,7 +435,7 @@ Finally, the longest script, ``Player.gd``.
 
             for (int index = 0; index < GetSlideCount(); index++)
             {
-                KinematicCollision collision = GetSlideCollision(index);
+                KinematicCollision3D collision = GetSlideCollision(index);
                 if (collision.Collider is Mob mob && mob.IsInGroup("mob"))
                 {
                     if (Vector3.Up.Dot(collision.Normal) > 0.1f)

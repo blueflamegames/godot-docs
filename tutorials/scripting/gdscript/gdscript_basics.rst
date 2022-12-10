@@ -561,8 +561,8 @@ in a 3D grid.
 3D Plane type in normalized form that contains a ``normal`` vector field
 and a ``d`` scalar distance.
 
-:ref:`Quat <class_Quat>`
-^^^^^^^^^^^^^^^^^^^^^^^^
+:ref:`Quaternion <class_Quaternion>`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Quaternion is a datatype used for representing a 3D rotation. It's
 useful for interpolating rotations.
@@ -892,6 +892,14 @@ argument, unlike Python).
 
 A function can ``return`` at any point. The default return value is ``null``.
 
+If a function contains only one line of code, it can be written on one line::
+
+    func square(a): return a * a
+
+    func hello_world(): print("Hello World")
+
+    func empty_function(): pass
+
 Functions can also have type specification for the arguments and for the return
 value. Types for arguments can be added in a similar way to variables::
 
@@ -928,7 +936,7 @@ return early with the ``return`` keyword, but they can't return any value.
 Referencing functions
 ^^^^^^^^^^^^^^^^^^^^^
 
-Functions are first-class items in terms of the Callable object. Referencing a
+Functions are first-class items in terms of the :ref:`Callable <class_Callable>` object. Referencing a
 function by name without calling it will automatically generate the proper
 callable. This can be used to pass functions as arguments.
 
@@ -952,6 +960,32 @@ callable. This can be used to pass functions as arguments.
           the ``()`` operator directly. This behavior is implemented to avoid
           performance issues on direct function calls.
 
+Lambda functions
+^^^^^^^^^^^^^^^^
+
+Lambda functions allow you to declare functions that do not belong to a class. Instead a :ref:`Callable <class_Callable>` object is created and assigned to a variable directly.
+This can be useful to create Callables to pass around without polluting the class scope.
+
+::
+
+    var lambda = func(x): print(x)
+    lambda.call(42) # Prints "42"
+
+Lambda functions can be named for debugging purposes::
+
+    var lambda = func my_lambda(x):
+        print(x)
+
+Lambda functions capture the local environment. Local variables are passed by value, so they won't be updated in the lambda if changed in the local function::
+
+    var x = 42
+    var my_lambda = func(): print(x)
+    my_lambda.call() # Prints "42"
+    x = "Hello"
+    my_lambda.call() # Prints "42"
+
+.. note:: The values of the outer scope behave like constants. Therefore, if you declare an array or dictionary, it can still be modified afterwards.
+
 Static functions
 ^^^^^^^^^^^^^^^^
 
@@ -961,6 +995,8 @@ useful to make libraries of helper functions::
 
     static func sum2(a, b):
         return a + b
+
+Lambdas cannot be declared static.
 
 
 Statements and control flow
@@ -1107,6 +1143,25 @@ in the loop variable.
     for i in 2.2:
         statement # Similar to range(ceil(2.2)).
 
+If you want to assign values on an array as it is being iterated through, it
+is best to use ``for i in array.size()``.
+
+::
+    for i in array.size():
+	    array[i] = "Hello World"
+
+
+The loop variable is local to the for-loop and assigning to it will not change
+the value on the array. Objects passed by reference (such as nodes) can still
+be manipulated by calling methods on the loop variable.
+
+::
+    for string in string_array:
+        string = "Hello World" # This has no effect
+
+    for node in node_array:
+        node.add_to_group("Cool_Group") # This has an effect
+
 match
 ^^^^^
 
@@ -1155,7 +1210,7 @@ There are 6 pattern types:
     Matches the contents of a variable/enum::
 
         match typeof(x):
-            TYPE_REAL:
+            TYPE_FLOAT:
                 print("float")
             TYPE_STRING:
                 print("text")
@@ -1483,13 +1538,13 @@ Exports
 
     Documentation about exports has been moved to :ref:`doc_gdscript_exports`.
 
-.. _doc_gdscript_tool_mode:
 
+.. _doc_gdscript_basics_setters_getters:
 
-Properties
-~~~~~~~~~~
+Properties (setters and getters)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sometimes you want a class' member variable to do more than just hold data and actually perform
+Sometimes, you want a class' member variable to do more than just hold data and actually perform
 some validation or computation whenever its value change. It may also be desired to
 encapsulate its access in some way.
 
@@ -1533,6 +1588,8 @@ you can use a different notation to use existing class functions::
         get = get_my_prop, set = set_my_prop
 
 This can also be done in the same line.
+
+.. _doc_gdscript_tool_mode:
 
 Tool mode
 ~~~~~~~~~
@@ -1631,7 +1688,7 @@ to. To create custom signals for a class, use the ``signal`` keyword.
    Game Programming Patterns ebook.
 
 You can connect these signals to methods the same way you connect built-in
-signals of nodes like :ref:`class_Button` or :ref:`class_RigidBody`.
+signals of nodes like :ref:`class_Button` or :ref:`class_RigidBody3D`.
 
 In the example below, we connect the ``health_depleted`` signal from a
 ``Character`` node to a ``Game`` node. When the ``Character`` node emits the

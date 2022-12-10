@@ -14,14 +14,16 @@ JSON
 
 Helper class for creating and parsing JSON data.
 
+.. rst-class:: classref-introduction-group
+
 Description
 -----------
 
-The ``JSON`` enables all data types to be converted to and from a JSON string. This useful for serializing data to save to a file or send over the network.
+The **JSON** enables all data types to be converted to and from a JSON string. This useful for serializing data to save to a file or send over the network.
 
 \ :ref:`stringify<class_JSON_method_stringify>` is used to convert any data type into a JSON string.
 
-\ :ref:`parse<class_JSON_method_parse>` is used to convert any existing JSON data into a :ref:`Variant<class_Variant>` that can be used within Godot. If successfully parsed, use :ref:`get_data<class_JSON_method_get_data>` to retrieve the :ref:`Variant<class_Variant>`, and use ``typeof`` to check if the Variant's type is what you expect. JSON Objects are converted into a :ref:`Dictionary<class_Dictionary>`, but JSON data can be used to store :ref:`Array<class_Array>`\ s, numbers, :ref:`String<class_String>`\ s and even just a boolean.
+\ :ref:`parse<class_JSON_method_parse>` is used to convert any existing JSON data into a :ref:`Variant<class_Variant>` that can be used within Godot. If successfully parsed, use :ref:`data<class_JSON_property_data>` to retrieve the :ref:`Variant<class_Variant>`, and use ``typeof`` to check if the Variant's type is what you expect. JSON Objects are converted into a :ref:`Dictionary<class_Dictionary>`, but JSON data can be used to store :ref:`Array<class_Array>`\ s, numbers, :ref:`String<class_String>`\ s and even just a boolean.
 
 \ **Example**\ 
 
@@ -34,7 +36,7 @@ The ``JSON`` enables all data types to be converted to and from a JSON string. T
     # Retrieve data
     var error = json.parse(json_string)
     if error == OK:
-        var data_received = json.get_data()
+        var data_received = json.data
         if typeof(data_received) == TYPE_ARRAY:
             print(data_received) # Prints array
         else:
@@ -48,75 +50,136 @@ Alternatively, you can parse string using the static :ref:`parse_string<class_JS
 
     var data = JSON.parse_string(json_string) # Returns null if parsing failed.
 
+\ **Note:** Both parse methods do not fully comply with the JSON specification:
+
+- Trailing commas in arrays or objects are ignored, instead of causing a parser error.
+
+- New line and tab characters are accepted in string literals, and are treated like their corresponding escape sequences ``\n`` and ``\t``.
+
+- Numbers are parsed using :ref:`String.to_float<class_String_method_to_float>` which is generally more lax than the JSON specification.
+
+- Certain errors, such as invalid Unicode sequences, do not cause a parser error. Instead, the string is cleansed and an error is logged to the console.
+
+.. rst-class:: classref-reftable-group
+
+Properties
+----------
+
+.. table::
+   :widths: auto
+
+   +-------------------------------+---------------------------------------+----------+
+   | :ref:`Variant<class_Variant>` | :ref:`data<class_JSON_property_data>` | ``null`` |
+   +-------------------------------+---------------------------------------+----------+
+
+.. rst-class:: classref-reftable-group
+
 Methods
 -------
 
-+---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| :ref:`Variant<class_Variant>`         | :ref:`get_data<class_JSON_method_get_data>` **(** **)** |const|                                                                                                                                                                    |
-+---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| :ref:`int<class_int>`                 | :ref:`get_error_line<class_JSON_method_get_error_line>` **(** **)** |const|                                                                                                                                                        |
-+---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| :ref:`String<class_String>`           | :ref:`get_error_message<class_JSON_method_get_error_message>` **(** **)** |const|                                                                                                                                                  |
-+---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| :ref:`Error<enum_@GlobalScope_Error>` | :ref:`parse<class_JSON_method_parse>` **(** :ref:`String<class_String>` json_string **)**                                                                                                                                          |
-+---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| :ref:`Variant<class_Variant>`         | :ref:`parse_string<class_JSON_method_parse_string>` **(** :ref:`String<class_String>` json_string **)** |static|                                                                                                                   |
-+---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| :ref:`String<class_String>`           | :ref:`stringify<class_JSON_method_stringify>` **(** :ref:`Variant<class_Variant>` data, :ref:`String<class_String>` indent="", :ref:`bool<class_bool>` sort_keys=true, :ref:`bool<class_bool>` full_precision=false **)** |static| |
-+---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+.. table::
+   :widths: auto
+
+   +---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+   | :ref:`int<class_int>`                 | :ref:`get_error_line<class_JSON_method_get_error_line>` **(** **)** |const|                                                                                                                                                        |
+   +---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+   | :ref:`String<class_String>`           | :ref:`get_error_message<class_JSON_method_get_error_message>` **(** **)** |const|                                                                                                                                                  |
+   +---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+   | :ref:`Error<enum_@GlobalScope_Error>` | :ref:`parse<class_JSON_method_parse>` **(** :ref:`String<class_String>` json_string **)**                                                                                                                                          |
+   +---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+   | :ref:`Variant<class_Variant>`         | :ref:`parse_string<class_JSON_method_parse_string>` **(** :ref:`String<class_String>` json_string **)** |static|                                                                                                                   |
+   +---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+   | :ref:`String<class_String>`           | :ref:`stringify<class_JSON_method_stringify>` **(** :ref:`Variant<class_Variant>` data, :ref:`String<class_String>` indent="", :ref:`bool<class_bool>` sort_keys=true, :ref:`bool<class_bool>` full_precision=false **)** |static| |
+   +---------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+.. rst-class:: classref-section-separator
+
+----
+
+.. rst-class:: classref-descriptions-group
+
+Property Descriptions
+---------------------
+
+.. _class_JSON_property_data:
+
+.. rst-class:: classref-property
+
+:ref:`Variant<class_Variant>` **data** = ``null``
+
+.. rst-class:: classref-property-setget
+
+- void **set_data** **(** :ref:`Variant<class_Variant>` value **)**
+- :ref:`Variant<class_Variant>` **get_data** **(** **)**
+
+Contains the parsed JSON data in :ref:`Variant<class_Variant>` form.
+
+.. rst-class:: classref-section-separator
+
+----
+
+.. rst-class:: classref-descriptions-group
 
 Method Descriptions
 -------------------
 
-.. _class_JSON_method_get_data:
-
-- :ref:`Variant<class_Variant>` **get_data** **(** **)** |const|
-
-Returns the :ref:`Variant<class_Variant>` containing the data of a successful :ref:`parse<class_JSON_method_parse>`.
-
-\ **Note:** It will return ``Null`` if the last call to parse was unsuccessful or :ref:`parse<class_JSON_method_parse>` has not yet been called.
-
-----
-
 .. _class_JSON_method_get_error_line:
 
-- :ref:`int<class_int>` **get_error_line** **(** **)** |const|
+.. rst-class:: classref-method
+
+:ref:`int<class_int>` **get_error_line** **(** **)** |const|
 
 Returns ``0`` if the last call to :ref:`parse<class_JSON_method_parse>` was successful, or the line number where the parse failed.
+
+.. rst-class:: classref-item-separator
 
 ----
 
 .. _class_JSON_method_get_error_message:
 
-- :ref:`String<class_String>` **get_error_message** **(** **)** |const|
+.. rst-class:: classref-method
+
+:ref:`String<class_String>` **get_error_message** **(** **)** |const|
 
 Returns an empty string if the last call to :ref:`parse<class_JSON_method_parse>` was successful, or the error message if it failed.
+
+.. rst-class:: classref-item-separator
 
 ----
 
 .. _class_JSON_method_parse:
 
-- :ref:`Error<enum_@GlobalScope_Error>` **parse** **(** :ref:`String<class_String>` json_string **)**
+.. rst-class:: classref-method
+
+:ref:`Error<enum_@GlobalScope_Error>` **parse** **(** :ref:`String<class_String>` json_string **)**
 
 Attempts to parse the ``json_string`` provided.
 
-Returns an :ref:`Error<enum_@GlobalScope_Error>`. If the parse was successful, it returns ``OK`` and the result can be retrieved using :ref:`get_data<class_JSON_method_get_data>`. If unsuccessful, use :ref:`get_error_line<class_JSON_method_get_error_line>` and :ref:`get_error_message<class_JSON_method_get_error_message>` for identifying the source of the failure.
+Returns an :ref:`Error<enum_@GlobalScope_Error>`. If the parse was successful, it returns :ref:`@GlobalScope.OK<class_@GlobalScope_constant_OK>` and the result can be retrieved using :ref:`data<class_JSON_property_data>`. If unsuccessful, use :ref:`get_error_line<class_JSON_method_get_error_line>` and :ref:`get_error_message<class_JSON_method_get_error_message>` for identifying the source of the failure.
 
 Non-static variant of :ref:`parse_string<class_JSON_method_parse_string>`, if you want custom error handling.
+
+.. rst-class:: classref-item-separator
 
 ----
 
 .. _class_JSON_method_parse_string:
 
-- :ref:`Variant<class_Variant>` **parse_string** **(** :ref:`String<class_String>` json_string **)** |static|
+.. rst-class:: classref-method
+
+:ref:`Variant<class_Variant>` **parse_string** **(** :ref:`String<class_String>` json_string **)** |static|
 
 Attempts to parse the ``json_string`` provided and returns the parsed data. Returns ``null`` if parse failed.
+
+.. rst-class:: classref-item-separator
 
 ----
 
 .. _class_JSON_method_stringify:
 
-- :ref:`String<class_String>` **stringify** **(** :ref:`Variant<class_Variant>` data, :ref:`String<class_String>` indent="", :ref:`bool<class_bool>` sort_keys=true, :ref:`bool<class_bool>` full_precision=false **)** |static|
+.. rst-class:: classref-method
+
+:ref:`String<class_String>` **stringify** **(** :ref:`Variant<class_Variant>` data, :ref:`String<class_String>` indent="", :ref:`bool<class_bool>` sort_keys=true, :ref:`bool<class_bool>` full_precision=false **)** |static|
 
 Converts a :ref:`Variant<class_Variant>` var to JSON text and returns the result. Useful for serializing data to store or send over the network.
 
